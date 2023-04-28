@@ -18,6 +18,7 @@ Deze multiplayer spellen kunnen op 2 manieren worden gespeeld:
 - Beide spelers op dezelfde computer laten spelen door afwisselend controle te geven aan de spelers.
 - Met 2 computers via het lokale netwerk.
 
+Voor de applicatie zal gebruik worden gemaakt van .NET 6 en .NET Maui met de MVVM-architectuur.
 
 ## In- en uitvoer
 
