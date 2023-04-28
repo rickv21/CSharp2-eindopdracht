@@ -79,7 +79,6 @@ Deze volgt nog voor week 4.
 
 **Week 3**
 - Klassendiagram
-- MoSCoW analyse
 - Requirements analyse
 - Code conventies
 
