@@ -37,4 +37,31 @@ Deze volgt nog voor week 4.
 
 ## Planning
 
+**Week 1**
+- Het idee
+
+**Week 2**
+- Startdocument
+
+**Week 3**
+- Klassendiagram
+- MoSCoW analyse
+- Requirements analyse
+- Code conventies
+
+**Week 4**
+- Dashboard
+- Tussenpeiling
+
+**Week 5**
+- Memory 
+
+**Week 7**
+- Dammen 
+- 4 op een rij
+
+**Week 8**
+- Applicatie testen
+- Eindpresentatie
+
 ## Testplan
