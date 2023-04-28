@@ -71,22 +71,26 @@ Deze volgt nog voor week 4.
 ### Menu scherm
 
 ![menu](img/menu.png "menu")
+
 Dit is het menuscherm waar de gebruiker een game kan kiezen, ook is er de mogelijkheid om de gebruikersnaam te veranderen
 
 ### Memory
 
 ![memory](img/memory.png "memory")
+
 De memory game. De gebruiker mag per keer twee kaartjes omdraaien. Als deze hetzelfde zijn worden de kaartjes uit het spel gehaald.
 Als de kaartjes niet hetzelfde zijn worden ze weer omgedraaid. Verder wordt bijgehouden hoeveel beurten de gebruiker nodig heeft om het spel te voltooien.
 
 ### Dammen
 
 ![schaakbord](img/dammen.png "dammen")
+
 Traditioneel dammen. Spelers kunnen via een lokaal netwerk tegen elkaar spelen. Degene die als eerste alle stukken van de tegenstander weg heeft gespeeld wint.
 
 ### Vier op een rij
 
 ![vier-op-een-rij](img/vier-op-een-rij.png "vier-op-een-rij")
+
 Vier op een rij, twee spelers spelen tegen elkaar en mogen om de beurt een zet doen. Degene die als eerst horiontaal, verticaal of diagonaal vier op een rij heeft wint.
 
 ## Planning
