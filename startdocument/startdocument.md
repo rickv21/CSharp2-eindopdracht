@@ -3,6 +3,21 @@
 Startdocument van **Rick Vinke**, **Jesse Vugteveen**, **Jesse Oost**, **Max Appeldorn** en **Cedric Smit**.
 
 ## Beschrijving
+Voor de eindopdracht van C#-2 gaan we een collectie van kleine spellen maken.
+Deze collectie zal bestaan uit de volgende 3 spellen:
+- Dammen
+- Vier op een rij 
+- Memory
+
+Een spel zal gestart kunnen worden van een start scherm.
+
+Memory zal alleen te spelen zijn en het de tijd en aantal zetten bijhouden zodat je deze kan verbeteren.
+Vier op een rij en dammen zullen 'multiplayer' spellen worden die je tegen iemand anders kan spelen.
+Deze multiplayer spellen kunnen op 2 manieren worden gespeeld:
+
+- Beide spelers op dezelfde computer laten spelen door afwisselend controle te geven aan de spelers.
+- Met 2 computers via het lokale netwerk.
+
 
 ## In- en uitvoer
 
