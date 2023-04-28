@@ -1,12 +1,14 @@
-# Startdocument voor de C#-2 eindopdracht 
+# Startdocument voor de C#-2 eindopdracht
 
 Startdocument van **Rick Vinke**, **Jesse Vugteveen**, **Jesse Oost**, **Max Appeldorn** en **Cedric Smit**.
 
 ## Beschrijving
+
 Voor de eindopdracht van C#-2 gaan we een collectie van kleine spellen maken.
 Deze collectie zal bestaan uit de volgende 3 spellen:
+
 - Dammen
-- Vier op een rij 
+- Vier op een rij
 - Memory
 
 Een spel zal gestart kunnen worden van een start scherm.
@@ -29,7 +31,7 @@ In deze sectie wordt de in- en uitvoer van de application beschreven.
 In de onderstaande tabel wordt alle invoer (die de gebruiker moet invoeren om de toepassing te laten werken) beschreven.
 
 | Case        | Type   | Conditions                           |
-|-------------|--------|--------------------------------------|
+| ----------- | ------ | ------------------------------------ |
 | Player name | String | Kan niet null zijn.                  |
 | Ip-adres    | String | Moet een geldig IP of hostname zijn. |
 
@@ -38,7 +40,7 @@ In de onderstaande tabel wordt alle invoer (die de gebruiker moet invoeren om de
 In de onderstaande tabel wordt de verschillende uitvoer van de applicatie beschreven.
 
 | Case                                                  | Type    | Conditions                                                |
-|-------------------------------------------------------|---------|-----------------------------------------------------------|
+| ----------------------------------------------------- | ------- | --------------------------------------------------------- |
 | Aantal beurten in Memory.                             | int     | Kan nooit minder zijn dan het aantal memory kaarten / 2 . |
 | Naam van de speler die aan de beurt is.               | String  | Kan niet null zijn.                                       |
 | Naam van de speler die een spel heeft gewonnen.       | String  | Kan niet null zijn.                                       |
@@ -47,12 +49,12 @@ In de onderstaande tabel wordt de verschillende uitvoer van de applicatie beschr
 | Het aantal dam stenen van een speler.                 | int     |                                                           |
 | De positie van de huidige dam steen.                  | int     |                                                           |
 
-
 #### Calculaties
+
 In de onderstaande tabel worden de calculaties van de applicatie beschreven.
 
 | Case                              | Calculatie                                                                   |
-|-----------------------------------|------------------------------------------------------------------------------|
+| --------------------------------- | ---------------------------------------------------------------------------- |
 | Memory kaart vergelijking.        | Calculeren of de twee geselecteerde Memory kaarten hetzelfde zijn.           |
 | Memory win status.                | Calculeren of de Memory game is gewonnen.                                    |
 | Vier op een rij steen calculatie. | Calculeren of de vier op een rij steen kan vallen en hoe ver die kan vallen. |
@@ -62,13 +64,36 @@ In de onderstaande tabel worden de calculaties van de applicatie beschreven.
 | Dammen win status                 | Calculeren of een van de spelers dammen heeft gewonnen.                      |
 | Netwerk gegevens uitwisselen      | Stuur gegevens tussen de spelers zodat de gegevens gelijk zijn.              |
 
-
 ## Klassendiagram
+
 Deze volgt nog voor week 4.
 
 ## Wireframes
 
-![Game1](game1.png "Game1")
+### Menu scherm
+
+![menu](img/menu.png "menu")
+
+Dit is het menuscherm waar de gebruiker een game kan kiezen, ook is er de mogelijkheid om de gebruikersnaam te veranderen
+
+### Memory
+
+![memory](img/memory.png "memory")
+
+De memory game. De gebruiker mag per keer twee kaartjes omdraaien. Als deze hetzelfde zijn worden de kaartjes uit het spel gehaald.
+Als de kaartjes niet hetzelfde zijn worden ze weer omgedraaid. Verder wordt bijgehouden hoeveel beurten de gebruiker nodig heeft om het spel te voltooien.
+
+### Dammen
+
+![schaakbord](img/dammen.png "dammen")
+
+Traditioneel dammen. Spelers kunnen via een lokaal netwerk tegen elkaar spelen. Degene die als eerste alle stukken van de tegenstander weg heeft gespeeld wint.
+
+### Vier op een rij
+
+![vier-op-een-rij](img/vier-op-een-rij.png "vier-op-een-rij")
+
+Vier op een rij, twee spelers spelen tegen elkaar en mogen om de beurt een zet doen. Degene die als eerst horiontaal, verticaal of diagonaal vier op een rij heeft wint.
 
 ## Planning
 
@@ -99,5 +124,6 @@ Deze volgt nog voor week 4.
 - Eindpresentatie
 
 ## Testplan
+
 Het testplan is afhankelijk van dat de klassen bekend zijn.
 Dus deze komt samen met het klassendiagram voor week 4.
