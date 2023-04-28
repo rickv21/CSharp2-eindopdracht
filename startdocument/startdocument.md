@@ -38,3 +38,5 @@ Deze volgt nog voor week 4.
 ## Planning
 
 ## Testplan
+Het testplan is afhankelijk van dat de klassen bekend zijn.
+Dus deze komt samen met het klassendiagram voor week 4.
