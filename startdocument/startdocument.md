@@ -20,6 +20,8 @@ Deze multiplayer spellen kunnen op 2 manieren worden gespeeld:
 - Beide spelers op dezelfde computer laten spelen door afwisselend controle te geven aan de spelers.
 - Met 2 computers via het lokale netwerk.
 
+Voor de applicatie zal gebruik worden gemaakt van .NET 6 en .NET Maui met de MVVM-architectuur.
+
 ## In- en uitvoer
 
 In deze sectie wordt de in- en uitvoer van de application beschreven.
@@ -94,6 +96,32 @@ Traditioneel dammen. Spelers kunnen via een lokaal netwerk tegen elkaar spelen. 
 Vier op een rij, twee spelers spelen tegen elkaar en mogen om de beurt een zet doen. Degene die als eerst horiontaal, verticaal of diagonaal vier op een rij heeft wint.
 
 ## Planning
+
+**Week 1**
+- Het idee
+
+**Week 2**
+- Startdocument
+
+**Week 3**
+- Klassendiagram
+- Requirements analyse
+- Code conventies
+
+**Week 4**
+- Dashboard
+- Tussenpeiling
+
+**Week 5**
+- Memory 
+
+**Week 7**
+- Dammen 
+- 4 op een rij
+
+**Week 8**
+- Applicatie testen
+- Eindpresentatie
 
 ## Testplan
 
