@@ -125,5 +125,40 @@ Vier op een rij, twee spelers spelen tegen elkaar en mogen om de beurt een zet d
 
 ## Testplan
 
-Het testplan is afhankelijk van dat de klassen bekend zijn.
-Dus deze komt samen met het klassendiagram voor week 4.
+In dit hoofdstuk worden alle testcases aangeduid.
+
+### #1 Testcases Memory
+
+| Stap | Invoer                                     | Verwachte Uitvoer                                            |
+| ---- | ------------------------------------------ | ------------------------------------------------------------ |
+| 1    | Selecteer het spel 'Memory'                | Een nieuw spel start met een willekeurig dek aan             |
+| 2    | Klik op twee overeenkomende kaarten        | Beide kaarten draaien om en er komt een melding dat de kaarten overeenkomen |
+| 3    | Klik op twee kaarten die niet overeenkomen | Beide kaarten draaien om en er komt een melding dat de kaarten niet overeenkomen |
+| 4    | Vindt alle overeenkomende kaarten          | Er komt een melding dat de speler feliciteert. Het aantal pogingen en de tijd die de speler heeft besteed komt ook in de melding. |
+
+### #2 Testcases Vier op een rij
+
+| Stap | Invoer                                                       | Verwachte Uitvoer                                            |
+| ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1    | Selecteer het spel 'Vier op een rij'                         | Er komt een leeg spelbord. Aan de bovenkant is een gele of rode schrijf die naar links of rechts kan. Er wordt ook aangegeven wie de beurt heeft. |
+| 2    | Maak een zet                                                 | De schrijf komt in de laagst mogelijke cel te staan en de andere speler krijgt de beurt. |
+| 3    | Plaats 4 schijven van de zelfde kleur in een rij, kolom of diagonaal | Bij de winnende partij komt er een melding dat de speler feliciteert. Bij de verliezende partij komt ere en melding dat aangeeft dat de speler verloren heeft. |
+
+### #3 Testcases Dammen
+
+| Stap | Invoer                                                       | Verwachte Uitvoer                                            |
+| ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1    | Selecteer het spel 'Dammen'                                  | Er komt een nieuw spelbord met zwart en witte damschijven in hun start posities |
+| 2    | Klik op een witte schijf dat een geldige zet heeft           | De schijf licht op en de mogelijke zetten worden weergegeven |
+| 3    | Klik op een locatie geldige locatie waar de dam schijf heen kan | De schrijf wordt verplaats en de andere speler krijgt de beurt |
+| 4    | Slaan                                                        |                                                              |
+| 5    | Dam                                                          |                                                              |
+| 6    | Steel alle schijven van de tegen partij                      | Bij de winnende partij komt er een melding dat de speler feliciteert. Bij de verliezende partij komt ere en melding dat aangeeft dat de speler verloren heeft. |
+
+### #4 Verbinden
+
+| Stap | Invoer                                                       | Uitvoer                                           |
+| ---- | ------------------------------------------------------------ | ------------------------------------------------- |
+| 1    | Selecteer het IP adres of hostnaam in                        | Er wordt verbinding gemaakt met de andere speler  |
+| 2    | In het spel vier op een rij of dammen, maak een zet in het spel | De zet wordt ook weergegeven bij te andere partij |
+
