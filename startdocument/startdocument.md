@@ -151,8 +151,8 @@ In dit hoofdstuk worden alle testcases aangeduid.
 | 1    | Selecteer het spel 'Dammen'                                  | Er komt een nieuw spelbord met zwart en witte damschijven in hun start posities |
 | 2    | Klik op een witte schijf dat een geldige zet heeft           | De schijf licht op en de mogelijke zetten worden weergegeven |
 | 3    | Klik op een locatie geldige locatie waar de dam schijf heen kan | De schrijf wordt verplaats en de andere speler krijgt de beurt |
-| 4    | Slaan                                                        |                                                              |
-| 5    | Dam                                                          |                                                              |
+| 4    | Zorg dat de schijven in een positie staan waardoor er geslagen kan worden en maak de zet | De schijf van de tegenpartij wordt ingenomen                 |
+| 5    | Zorg dat de schijven in een positie staan waardoor er een dam kan worden gemaakt en maak de zet | De schijf wordt nu een dam                                   |
 | 6    | Steel alle schijven van de tegen partij                      | Bij de winnende partij komt er een melding dat de speler feliciteert. Bij de verliezende partij komt ere en melding dat aangeeft dat de speler verloren heeft. |
 
 ### #4 Verbinden
