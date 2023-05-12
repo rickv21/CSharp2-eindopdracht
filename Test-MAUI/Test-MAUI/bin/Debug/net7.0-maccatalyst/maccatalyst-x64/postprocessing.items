@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <_PostProcessingItem Include="Test-MAUI.app/Contents/MacOS/Test-MAUI">
+      <BCSymbolMapName>Test-MAUI.bcsymbolmap</BCSymbolMapName>
+      <NoDSymUtil>true</NoDSymUtil>
+      <dSYMSourcePathExists>false</dSYMSourcePathExists>
+      <NoSymbolStrip>true</NoSymbolStrip>
+      <dSYMInfoPlistRelativePath>Test-MAUI.app.dSYM\Contents\Info.plist</dSYMInfoPlistRelativePath>
+      <SymbolFile>/Users/cedric/Dev/CSharp2-eindopdracht/Test-MAUI/Test-MAUI/obj/Debug/net7.0-maccatalyst/maccatalyst-x64/mtouch-symbols.list</SymbolFile>
+      <DSymName>Test-MAUI.app.dSYM</DSymName>
+      <SourceProjectPath>/Users/cedric/Dev/CSharp2-eindopdracht/Test-MAUI/Test-MAUI</SourceProjectPath>
+    </_PostProcessingItem>
+  </ItemGroup>
+</Project>
