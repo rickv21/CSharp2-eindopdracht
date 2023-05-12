@@ -127,7 +127,16 @@ Vier op een rij, twee spelers spelen tegen elkaar en mogen om de beurt een zet d
 
 In dit hoofdstuk worden alle testcases aangeduid.
 
-### #1 Testcases Memory
+### #1 Gebruikers naam aanpassen
+
+| Stap | Invoer                              | Verwachte Uitvoer                                            |
+| ---- | ----------------------------------- | ------------------------------------------------------------ |
+| 1    | Selecteer 'Verander gebruikersnaam' | De gebruiker kan een gebruikers naam invullen                |
+| 2    | Vul een een gebruikersnaam in       | De gebruikersnaam wordt aangepast en er komt een succes melding |
+
+
+
+### #2 Testcases Memory
 
 | Stap | Invoer                                     | Verwachte Uitvoer                                            |
 | ---- | ------------------------------------------ | ------------------------------------------------------------ |
@@ -136,7 +145,7 @@ In dit hoofdstuk worden alle testcases aangeduid.
 | 3    | Klik op twee kaarten die niet overeenkomen | Beide kaarten draaien om en er komt een melding dat de kaarten niet overeenkomen |
 | 4    | Vindt alle overeenkomende kaarten          | Er komt een melding dat de speler feliciteert. Het aantal pogingen en de tijd die de speler heeft besteed komt ook in de melding. |
 
-### #2 Testcases Vier op een rij
+### #3 Testcases Vier op een rij
 
 | Stap | Invoer                                                       | Verwachte Uitvoer                                            |
 | ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -144,7 +153,7 @@ In dit hoofdstuk worden alle testcases aangeduid.
 | 2    | Maak een zet                                                 | De schrijf komt in de laagst mogelijke cel te staan en de andere speler krijgt de beurt. |
 | 3    | Plaats 4 schijven van de zelfde kleur in een rij, kolom of diagonaal | Bij de winnende partij komt er een melding dat de speler feliciteert. Bij de verliezende partij komt ere en melding dat aangeeft dat de speler verloren heeft. |
 
-### #3 Testcases Dammen
+### #4 Testcases Dammen
 
 | Stap | Invoer                                                       | Verwachte Uitvoer                                            |
 | ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -155,7 +164,7 @@ In dit hoofdstuk worden alle testcases aangeduid.
 | 5    | Zorg dat de schijven in een positie staan waardoor er een dam kan worden gemaakt en maak de zet | De schijf wordt nu een dam                                   |
 | 6    | Steel alle schijven van de tegen partij                      | Bij de winnende partij komt er een melding dat de speler feliciteert. Bij de verliezende partij komt ere en melding dat aangeeft dat de speler verloren heeft. |
 
-### #4 Verbinden
+### #5 Verbinden
 
 | Stap | Invoer                                                       | Uitvoer                                           |
 | ---- | ------------------------------------------------------------ | ------------------------------------------------- |
