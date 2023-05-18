@@ -66,7 +66,7 @@ In de onderstaande tabel worden de calculaties van de applicatie beschreven.
 
 ## Klassendiagram
 
-Deze volgt nog voor week 4.
+![menu](img/class-diagram.png "class-diagram")
 
 ## Wireframes
 
@@ -102,18 +102,14 @@ Vier op een rij, twee spelers spelen tegen elkaar en mogen om de beurt een zet d
 
 **Week 2**
 - Startdocument
-
-**Week 3**
-- Klassendiagram
-- Requirements analyse
-- Code conventies
+- Onderzoek
 
 **Week 4**
-- Dashboard
-- Tussenpeiling
+- Klassendiagram
 
 **Week 5**
 - Memory 
+- Dashboard
 
 **Week 7**
 - Dammen 
