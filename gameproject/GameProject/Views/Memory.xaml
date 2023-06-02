@@ -1,0 +1,34 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:GameProject.ViewModels"
+             x:Class="GameProject.Views.Memory"
+             xmlns:views="clr-namespace:GameProject.Views"
+             x:DataType="viewModels:MemoryViewModel">
+    <!-- <ContentPage.ToolbarItems> -->
+    <!--<ToolbarItem Text="Back" Clicked="OnBackButtonClicked" /> -->
+    <!--</ContentPage.ToolbarItems> -->
+
+    <StackLayout Padding="100,0,100,0">
+        <Button x:Name="BackButton" Text="Go back" WidthRequest="100" HorizontalOptions="Start" Margin="0,20,0,20"/>
+        <Label x:Name="TurnLabel" Text="{Binding TurnText}" HorizontalOptions="Start" Margin="0,5,0,5" VerticalOptions="Start" />
+        <Grid x:Name="MemoryGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </StackLayout>
+
+</ContentPage>

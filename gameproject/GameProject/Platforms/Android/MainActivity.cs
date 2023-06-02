@@ -8,4 +8,3 @@ namespace GameProject;
 public class MainActivity : MauiAppCompatActivity
 {
 }
-
