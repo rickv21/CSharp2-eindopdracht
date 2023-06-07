@@ -90,6 +90,13 @@ public partial class ConnectFour : ContentPage
                 return;
             }
 
+            if (IsBoardFull())
+            {
+                DisplayAlert("Game over", "Het is gelijkspel!", "OK");
+                isGameOver = true;
+                return;
+            }
+
             currentPlayer = (currentPlayer == Player.Red) ? Player.Yellow : Player.Red;
 
             Button lowestRowButton = (Button)gameGrid.Children.Cast<View>().First(c => Grid.GetRow(c) == row && Grid.GetColumn(c) == column);
@@ -136,12 +143,10 @@ public partial class ConnectFour : ContentPage
                         break;
                     }
                 }
-
                 if (win)
                     return true;
             }
         }
-
         return false;
     }
 
@@ -164,7 +169,6 @@ public partial class ConnectFour : ContentPage
                     return true;
             }
         }
-
         return false;
     }
 
@@ -230,5 +234,20 @@ public partial class ConnectFour : ContentPage
             startColumn--;
         }
         return false;
+    }
+
+    private bool IsBoardFull()
+    {
+        for(int row = 0; row < Rows; row++)
+        {
+            for(int col = 0; col < Columns; col++)
+            {
+                if (board[row, col] == Player.None)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
