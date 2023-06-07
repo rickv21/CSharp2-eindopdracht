@@ -24,6 +24,8 @@ public partial class ConnectFour : ContentPage
     private void NewGame_Clicked(object sender, EventArgs e)
     {
         InitializeGame();
+        titleLabel.IsVisible = true;
+        startButton.IsVisible = false;
     }
 
     private enum Player
@@ -87,6 +89,8 @@ public partial class ConnectFour : ContentPage
             {
                 DisplayAlert("Game over", $"{currentPlayer} heeft gewonnen!", "OK");
                 isGameOver = true;
+                titleLabel.IsVisible = false;
+                startButton.IsVisible = true;
                 return;
             }
 
@@ -94,6 +98,8 @@ public partial class ConnectFour : ContentPage
             {
                 DisplayAlert("Game over", "Het is gelijkspel!", "OK");
                 isGameOver = true;
+                titleLabel.IsVisible = false;
+                startButton.IsVisible = true;
                 return;
             }
 
