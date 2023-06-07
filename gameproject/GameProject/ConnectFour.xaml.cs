@@ -177,54 +177,65 @@ public partial class ConnectFour : ContentPage
     {
         int count = 0;
 
-        // Top right to bottom left
-        for (int i = -3; i <= 3; i++)
-        {
-            int r = row - i;
-            int c = column + i;
+        // Check top left to bottom right
+        int startRow = row;
+        int startColumn = column;
 
-            if (r >= 0 && r < Rows && c >= 0 && c < Columns)
-            {
-                if (board[r, c] == currentPlayer)
-                {
-                    count++;
-                    if (count == 4)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        count = 0;
-                    }
-                }
-            }
+        while (startRow > 0 && startColumn > 0)
+        {
+            startRow--;
+            startColumn--;
         }
 
-        count = 0;
-
-        // Top left to buttom right
-        for (int i = -3; i <= 3; i++)
+        while (startRow <= Rows - 4 && startColumn <= Columns - 4)
         {
-            int r = row + i;
-            int c = column + i;
-
-            if (r >= 0 && r < Rows && c >= 0 && c < Columns)
+            if (board[startRow, startColumn] == currentPlayer)
             {
-                if (board[r, c] == currentPlayer)
+                bool win = true;
+                for (int i = 1; i < 4; i++)
                 {
-                    count++;
-                    if (count == 4)
+                    if (board[startRow + i, startColumn + i] != currentPlayer)
                     {
-                        return true;
-                    }
-                    else
-                    {
-                        count = 0;
+                        win = false;
+                        break;
                     }
                 }
+                if (win)
+                    return true;
             }
+            startRow++;
+            startColumn++;
         }
 
+        // Check top right to bottom left
+        startRow = row;
+        startColumn = column;
+
+        while (startRow > 0 && startColumn < Columns - 1)
+        {
+            startRow--;
+            startColumn++;
+        }
+
+        while (startRow <= Rows - 4 && startColumn >= 3)
+        {
+            if (board[startRow, startColumn] == currentPlayer)
+            {
+                bool win = true;
+                for (int i = 1; i < 4; i++)
+                {
+                    if (board[startRow + i, startColumn - i] != currentPlayer)
+                    {
+                        win = false;
+                        break;
+                    }
+                }
+                if (win)
+                    return true;
+            }
+            startRow++;
+            startColumn--;
+        }
         return false;
     }
 }
