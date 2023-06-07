@@ -97,7 +97,6 @@ public partial class ConnectFour : ContentPage
         }
     }
 
-    // TODO: Currently can place whereever you want, should only be at the botom
     private bool IsValidMove(int column)
     {
         return board[0, column] == 0;
