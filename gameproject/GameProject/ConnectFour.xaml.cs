@@ -114,7 +114,6 @@ public partial class ConnectFour : ContentPage
         return -1;
     }
 
-    // TODO: Currently you cannot win
     private bool CheckForWin(int row, int column)
     {
         return CheckHorizontalWin(row, column) ||
@@ -124,8 +123,6 @@ public partial class ConnectFour : ContentPage
 
     private bool CheckHorizontalWin(int row, int column)
     {
-        int count = 0;
-
         for (int c = Math.Max(0, column - 3); c <= Math.Min(Columns - 4, column); c++)
         {
             if (board[row, c] == currentPlayer)
@@ -150,8 +147,6 @@ public partial class ConnectFour : ContentPage
 
     private bool CheckVerticalWin(int row, int column)
     {
-        int count = 0;
-
         for (int r = Math.Max(0, row - 3); r <= Math.Min(Rows - 4, row); r++)
         {
             if (board[r, column] == currentPlayer)
@@ -175,8 +170,6 @@ public partial class ConnectFour : ContentPage
 
     private bool CheckDiagonalWin(int row, int column)
     {
-        int count = 0;
-
         // Check top left to bottom right
         int startRow = row;
         int startColumn = column;
