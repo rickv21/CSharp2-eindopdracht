@@ -107,6 +107,8 @@ public partial class ConnectFour : ContentPage
 
             Button lowestRowButton = (Button)gameGrid.Children.Cast<View>().First(c => Grid.GetRow(c) == row && Grid.GetColumn(c) == column);
             lowestRowButton.BackgroundColor = (currentPlayer == Player.Red) ? Color.FromHex("FFFF00") : Color.FromHex("#FF0000");
+
+            titleLabel.Text = $"Current Player: {(currentPlayer == Player.Red ? "Red" : "Yellow")}";
         }
     }
 
