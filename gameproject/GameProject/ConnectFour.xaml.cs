@@ -244,9 +244,9 @@ public partial class ConnectFour : ContentPage
 
     private bool IsBoardFull()
     {
-        for(int row = 0; row < Rows; row++)
+        for (int row = 0; row < Rows; row++)
         {
-            for(int col = 0; col < Columns; col++)
+            for (int col = 0; col < Columns; col++)
             {
                 if (board[row, col] == Player.None)
                 {
