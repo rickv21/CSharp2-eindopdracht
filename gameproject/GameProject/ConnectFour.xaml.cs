@@ -93,7 +93,7 @@ public partial class ConnectFour : ContentPage
             currentPlayer = (currentPlayer == Player.Red) ? Player.Yellow : Player.Red;
 
             Button lowestRowButton = (Button)gameGrid.Children.Cast<View>().First(c => Grid.GetRow(c) == row && Grid.GetColumn(c) == column);
-            lowestRowButton.BackgroundColor = (currentPlayer == Player.Red) ? Color.FromHex("FF0000") : Color.FromHex("#FFFF00");
+            lowestRowButton.BackgroundColor = (currentPlayer == Player.Red) ? Color.FromHex("FFFF00") : Color.FromHex("#FF0000");
         }
     }
 
@@ -126,20 +126,12 @@ public partial class ConnectFour : ContentPage
     {
         int count = 0;
 
-        for (int c = Math.Max(0, column - 3); c <= Math.Min(Columns - 1, column + 3); c++)
+        for (int c = Math.Max(0, column - 3); c <= Math.Min(Columns - 1, column); c++)
         {
-            if (board[row, c] == currentPlayer)
-            {
-                count++;
-                if (count == 4)
-                {
-                    return true;
-                }
-                else
-                {
-                    count = 0;
-                }
-            }
+            count = (board[row, c] == currentPlayer) ? count + 1 : 0;
+
+            if (count >= 4)
+                return true;
         }
 
         return false;
@@ -219,7 +211,6 @@ public partial class ConnectFour : ContentPage
                 }
             }
         }
-
 
         return false;
     }
