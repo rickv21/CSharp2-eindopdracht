@@ -1,4 +1,7 @@
-﻿namespace GameProject;
+﻿
+using Plugin.Maui.Audio;
+
+namespace GameProject;
 
 public static class MauiProgram
 {
@@ -13,6 +16,8 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
-		return builder.Build();
+       // builder.Services.AddSingleton(AudioManager.Current);
+
+        return builder.Build();
 	}
 }

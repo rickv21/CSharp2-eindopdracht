@@ -49,7 +49,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Audio\beep-bad.wav" />
+	  <None Remove="Resources\Audio\beep-good.wav" />
+	  <None Remove="Resources\Audio\beep.wav" />
 	  <None Remove="Resources\Images\dice.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Audio\beep-bad.wav" />
+	  <EmbeddedResource Include="Resources\Audio\beep-good.wav" />
+	  <EmbeddedResource Include="Resources\Audio\beep.wav" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
+	  <PackageReference Include="SharpHook" Version="4.2.0" />
+	  <PackageReference Include="SharpHook.Reactive" Version="4.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

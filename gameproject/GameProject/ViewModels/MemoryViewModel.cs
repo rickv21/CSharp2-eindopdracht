@@ -1,7 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using GameProject.Memory;
 using GameProject.Models;
+using Plugin.Maui.Audio;
+using SharpHook;
+using SharpHook.Reactive;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace GameProject.ViewModels
 {
@@ -12,6 +18,12 @@ namespace GameProject.ViewModels
         private string turnText;
         private Dictionary<int, int> usedNumbers = new Dictionary<int, int>();
         public event PropertyChangedEventHandler PropertyChanged;
+        private bool debug = false;
+
+        //Audio
+        Stream normalBeep;
+        Stream goodBeep;
+        Stream badBeep;
 
         public string TurnText
         {
@@ -49,10 +61,36 @@ namespace GameProject.ViewModels
         {
             model = new MemoryModel();
             this.memoryGrid = memoryGrid;
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            normalBeep = assembly.GetManifestResourceStream("GameProject.Resources.Audio.beep.wav");
+            badBeep = assembly.GetManifestResourceStream("GameProject.Resources.Audio.beep-bad.wav");
+            goodBeep = assembly.GetManifestResourceStream("GameProject.Resources.Audio.beep-good.wav");
+
+            var hook = new SimpleGlobalHook();
+
+            hook.KeyPressed += (s, e) =>
+            {
+                var key = e.Data.KeyCode.ToString().Substring(2);
+                if(key == "Insert")
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        debug = !debug;
+                        if (debug)
+                        {
+                            foreach (CardButton button in memoryGrid.Children)
+                            {
+                                button.ShowIcon();
+                            }
+                        }
+                    });
+            
+                    }
+            };
+
+            hook.RunAsync();
             StartGame();
-            //AddHoverEvents();
-            //IncrementCommand = new Command(Increment);
-            //DecrementCommand = new Command(Decrement);
         }
 
         internal void ResetMemoryGame()
@@ -65,7 +103,7 @@ namespace GameProject.ViewModels
 
         private void StartGame()
         {
-            turnText = "Turn text";
+            TurnText = "Turn: 1";
             Debug.WriteLine("Starting game!!");
             SetupModelValues();
             GenerateCards();
@@ -77,7 +115,7 @@ namespace GameProject.ViewModels
             model.Add("animationDone", true);
             //model.Add("isPaused", false);
             model.Add("foundNumbers", new List<int>());
-            model.Add("tries", 0);
+            model.Add("turns", 1);
         }
 
 
@@ -91,7 +129,7 @@ namespace GameProject.ViewModels
                 for (int col = 0; col < 6; col++)
                 {
                     int randomValue = GetRandomValue();
-                    GameProject.Memory.Card card = new GameProject.Memory.Card(randomValue, GetImageFromValue(randomValue));
+                    GameProject.Memory.Card card = new GameProject.Memory.Card(randomValue);
                     cards[row, col] = card;
                     Debug.WriteLine("Generated card: " + row + "-" + col);
                 }
@@ -108,6 +146,7 @@ namespace GameProject.ViewModels
 
             memoryGrid.ColumnSpacing = 25;
             memoryGrid.RowSpacing = 25;
+            memoryGrid.Padding = new Thickness(50, 50, 50, 50);
 
             for (int row = 0; row < cards.GetLength(0); row++)
             {
@@ -121,11 +160,10 @@ namespace GameProject.ViewModels
                         Margin = new Thickness(0),
                         BorderColor = Colors.Gray,
                         BackgroundColor = Colors.MediumPurple,
+                        FontSize = 24,  
                         BorderWidth = 1,
-                        Text = "Memory",
-                        //Text = card.GetValue().ToString(),
+                        Text = "??",
                         TextColor = Colors.White,
-                        HeightRequest = 100,
                     };
 
                     button.Command = new Command(() => ClickCardAsync(button));
@@ -136,6 +174,12 @@ namespace GameProject.ViewModels
                 }
             }
 
+        }
+
+        private void OnKey(KeyboardHookEventArgs e, IReactiveGlobalHook hook)
+        {
+            Debug.WriteLine("test");
+            Debug.WriteLine(e.Data.KeyChar);
         }
 
 
@@ -221,50 +265,6 @@ namespace GameProject.ViewModels
             return GetRandomValue();
         }
 
-        private ImageSource GetImageFromResource(string resourceName)
-        {
-            var assembly = GetType().Assembly;
-            using var stream = assembly.GetManifestResourceStream(resourceName);
-            if (stream != null)
-            {
-                using var memoryStream = new MemoryStream();
-                stream.CopyTo(memoryStream);
-                return ImageSource.FromStream(() => memoryStream);
-            }
-            return null;
-        }
-
-        private ImageSource GetImageFromValue(int number)
-        {
-            var resourceName = $"/YourAssemblyName.memory.{number}.png";
-            return GetImageFromResource(resourceName);
-        }
-
-
-        /* private void ResizeImageSource(ImageSource source, int width, int height)
-         {
-             if (source is not FileImageSource fileSource)
-                 return;
-
-             var path = fileSource.File;
-             if (!File.Exists(path))
-                 return;
-
-             var resizedPath = Path.Combine(Path.GetDirectoryName(path), $"{width}x{height}_{Path.GetFileName(path)}");
-
-             if (File.Exists(resizedPath))
-                 return;
-
-             var bitmap = new SKBitmap();
-             using var image = SKImage.FromBitmap(bitmap);
-             using var data = image.Encode();
-             using var stream = File.OpenWrite(resizedPath);
-             data.SaveTo(stream);
-             fileSource.File = resizedPath;
-         }*/
-
-
-
         public async Task ClickCardAsync(GameProject.Memory.CardButton button)
         {
             Debug.WriteLine("Clicked button! - " + button.GetCard().GetValue());
@@ -281,24 +281,18 @@ namespace GameProject.ViewModels
             //Wanneer er geen andere knop geselecteerd is.
             if (lastButton == null)
             {
-                //new AudioPlayer("beep-positief-1.wav").play();
+                playSound(normalBeep);
                 model.Add("lastClickedCard", button);
                 button.MarkSelection();
                 button.IsEnabled = false;
-                /*var popupMessage = new PopupMessage
-                {
-                    Title = "Win",
-                    Message = "Je hebt gewonnen"
-                };
-
-                // Publish the popup message
-                MessagingCenter.Send(this, "DisplayPopup", popupMessage);*/
                 return;
             }
 
             //Wanneer er 2 buttons met dezelfde afbeelding geselecteerd zijn. (Goed)
             if (button.GetCard().GetValue() == lastButton.GetCard().GetValue())
             {
+                playSound(goodBeep);
+
                 //new AudioPlayer("beep-positief-2.wav").play();
                 button.MarkCorrect();
                 button.IsEnabled = false;
@@ -332,7 +326,8 @@ namespace GameProject.ViewModels
             }
             else
             {
-                //  new AudioPlayer("beep-negatief.wav").play();
+                playSound(badBeep);
+              
                 //When the two cards do not match. (Error)
                 model.Add("animationDone", false);
                 button.MarkWrong();
@@ -352,11 +347,25 @@ namespace GameProject.ViewModels
                 model.Add("animationDone", true);
 
             }
+
+            int turn = model.Get<int>("turns") + 1;
+            Debug.WriteLine(turn);  
+            TurnText = "Turn: " + turn;
+            model.Set("turns", turn);
+        }
+
+        private void playSound(Stream stream)
+        {
+            if (stream != null)
+            {
+                var audioPlayer = AudioManager.Current.CreatePlayer(stream);
+                audioPlayer.Play();
+            }
         }
 
         protected void SaveHighScore()
         {
-            int tries = model.Get<int>("tries");
+            int tries = model.Get<int>("turns");
             try
             {
                 string executablePath = AppDomain.CurrentDomain.BaseDirectory;

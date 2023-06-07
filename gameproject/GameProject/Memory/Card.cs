@@ -6,12 +6,10 @@ namespace GameProject.Memory
     public class Card
     {
         private int value;
-        private ImageSource image;
 
-        public Card(int value, ImageSource image)
+        public Card(int value)
         {
             this.value = value;
-            this.image = image;
         }
 
         /**
@@ -23,16 +21,6 @@ namespace GameProject.Memory
         public int GetValue()
         {
             return value;
-        }
-
-        /**
-         * Returnes the image associated with this Card.
-         *
-         * @return the image.
-         */
-        public ImageSource GetImage()
-        {
-            return image;
         }
     }
 }
