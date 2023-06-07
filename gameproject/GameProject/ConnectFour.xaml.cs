@@ -1,7 +1,3 @@
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-
 namespace GameProject;
 
 public partial class ConnectFour : ContentPage
@@ -95,7 +91,9 @@ public partial class ConnectFour : ContentPage
             }
 
             currentPlayer = (currentPlayer == Player.Red) ? Player.Yellow : Player.Red;
-            button.BackgroundColor = (currentPlayer == Player.Red) ? Color.FromHex("FF0000") : Color.FromHex("#FFFF00");
+
+            Button lowestRowButton = (Button)gameGrid.Children.Cast<View>().First(c => Grid.GetRow(c) == row && Grid.GetColumn(c) == column);
+            lowestRowButton.BackgroundColor = (currentPlayer == Player.Red) ? Color.FromHex("FF0000") : Color.FromHex("#FFFF00");
         }
     }
 
