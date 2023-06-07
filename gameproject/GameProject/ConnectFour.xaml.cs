@@ -126,12 +126,23 @@ public partial class ConnectFour : ContentPage
     {
         int count = 0;
 
-        for (int c = Math.Max(0, column - 3); c <= Math.Min(Columns - 1, column); c++)
+        for (int c = Math.Max(0, column - 3); c <= Math.Min(Columns - 4, column); c++)
         {
-            count = (board[row, c] == currentPlayer) ? count + 1 : 0;
+            if (board[row, c] == currentPlayer)
+            {
+                bool win = true;
+                for (int i = 1; i < 4; i++)
+                {
+                    if (board[row, c + i] != currentPlayer)
+                    {
+                        win = false;
+                        break;
+                    }
+                }
 
-            if (count >= 4)
-                return true;
+                if (win)
+                    return true;
+            }
         }
 
         return false;
