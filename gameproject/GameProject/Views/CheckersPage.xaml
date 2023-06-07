@@ -4,7 +4,7 @@
              x:Class="GameProject.CheckersPage"
              Title="CheckersPage"
              BackgroundColor="gray">
-    <Grid x:Name="board"  VerticalOptions="Center" HorizontalOptions="Center">
+    <Grid x:Name="CheckersGrid"  VerticalOptions="Center" HorizontalOptions="Center">
          <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition Height="100" />
@@ -28,7 +28,7 @@
         </Grid.ColumnDefinitions>
         
         <!-- Row 1 -->
-        <BoxView Grid.Row="0" Grid.Column="0" Color="Black" />
+        <!--<BoxView Grid.Row="0" Grid.Column="0" Color="Black" />
         <BoxView Grid.Row="0" Grid.Column="1" Color="White" />
         <BoxView Grid.Row="0" Grid.Column="2" Color="Black" />
         <BoxView Grid.Row="0" Grid.Column="3" Color="White" />
@@ -37,7 +37,7 @@
         <BoxView Grid.Row="0" Grid.Column="6" Color="Black" />
         <BoxView Grid.Row="0" Grid.Column="7" Color="White" />
         
-        <!-- Row 2 -->
+        --><!-- Row 2 --><!--
         <BoxView Grid.Row="1" Grid.Column="0" Color="White" />
         <BoxView Grid.Row="1" Grid.Column="1" Color="Black" />
         <BoxView Grid.Row="1" Grid.Column="2" Color="White" />
@@ -47,7 +47,7 @@
         <BoxView Grid.Row="1" Grid.Column="6" Color="White" />
         <BoxView Grid.Row="1" Grid.Column="7" Color="Black" />
         
-        <!-- Rows 3-6 -->
+        --><!-- Rows 3-6 --><!--
         <BoxView Grid.Row="2" Grid.Column="0" Color="Black" />
         <BoxView Grid.Row="2" Grid.Column="1" Color="White" />
         <BoxView Grid.Row="2" Grid.Column="2" Color="Black" />
@@ -84,7 +84,7 @@
         <BoxView Grid.Row="5" Grid.Column="6" Color="White" />
         <BoxView Grid.Row="5" Grid.Column="7" Color="Black" />
 
-        <!-- Row 7 -->
+        --><!-- Row 7 --><!--
         <BoxView Grid.Row="6" Grid.Column="0" Color="Black" />
         <BoxView Grid.Row="6" Grid.Column="1" Color="White" />
         <BoxView Grid.Row="6" Grid.Column="2" Color="Black" />
@@ -101,6 +101,6 @@
         <BoxView Grid.Row="7" Grid.Column="4" Color="White" />
         <BoxView Grid.Row="7" Grid.Column="5" Color="Black" />
         <BoxView Grid.Row="7" Grid.Column="6" Color="White" />
-        <BoxView Grid.Row="7" Grid.Column="7" Color="Black" />
+        <BoxView Grid.Row="7" Grid.Column="7" Color="Black" />-->
     </Grid>
 </ContentPage>

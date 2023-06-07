@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameProject
+namespace GameProject.Checkers
 {
-    class Cell
+    internal class CheckersPlayer
     {
-        public Color CellColor { get; set; }
-        public Color PieceColor { get; set; }
     }
 }
