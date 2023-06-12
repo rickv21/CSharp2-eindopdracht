@@ -1,4 +1,6 @@
-﻿using GameProject.Networking;
+﻿using System.Diagnostics;
+
+using GameProject.Networking;
 using GameProject.Utils;
 
 namespace GameProject;
@@ -12,14 +14,16 @@ public partial class MainPage : ContentPage
         InitializeComponent();
     }
 
-    private void OnCreateHostClicked(object sender, EventArgs e)
+    private async void OnCreateHostClicked(object sender, EventArgs e)
     {
         ToggleNetworkButtons();
         Title.Text = "Wachten op verbinding";
         Info.Text = $"IP: {NetworkingUtils.GetLocalIPAddress()}";
         Info.IsVisible = true;
 
-        this.network = new TcpConnection(true);
+        this.network = new TcpConnection();
+
+        await network.StartServer();
     }
 
     private void OnConnectClientClicked(object sender, EventArgs e)
@@ -46,7 +50,7 @@ public partial class MainPage : ContentPage
 
     }
 
-    private void IpInput_Completed(object sender, EventArgs e)
+    private async void IpInput_Completed(object sender, EventArgs e)
     {
         string ipInput = ((Entry)sender).Text;
 
@@ -56,15 +60,17 @@ public partial class MainPage : ContentPage
             IpInput.IsEnabled = false;
             try
             {
-                network = new TcpConnection(false, ipInput);
+                network = new TcpConnection();
+                await network.StartClient(ipInput);
                 Title.Text = "Connected!";
-                network.SendMessage("Hello");
             }
             catch (Exception ex)
-            {   
+            {
                 Title.Text = ex.Message;
                 IpInput.IsEnabled = true;
             }
+
+            Debug.WriteLine(network.IsConnected());
         }
     }
 
