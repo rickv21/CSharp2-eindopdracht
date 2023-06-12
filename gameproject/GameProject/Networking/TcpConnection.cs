@@ -20,7 +20,9 @@ namespace GameProject.Networking
         private TcpClient client;
         private NetworkStream stream;
         private byte[] receiveBuffer;
+        private bool isHost;
 
+        public TcpConnection() { }
 
         public TcpConnection(bool isHost, string ip = null)
         {
@@ -36,7 +38,7 @@ namespace GameProject.Networking
             listenerTask.Start();
         }
 
-        public void StartServer()
+        public async Task StartServer()
         {
             try
             {
@@ -44,32 +46,31 @@ namespace GameProject.Networking
                 server.Start();
                 Debug.WriteLine("Server started. Waiting for a client to connect...");
 
-                client = server.AcceptTcpClient();
-                Debug.WriteLine("Client connected.");
+                client = await server.AcceptTcpClientAsync();
+                Console.WriteLine("Client connected.");
 
                 stream = client.GetStream();
                 receiveBuffer = new byte[1024];
 
-                RecieveMessage();
+                await Task.Run(() => RecieveMessage());
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"{ex.Message}");
             }
-            
         }
-        public void StartClient(string ip)
+
+        public async Task StartClient(string ip)
         {
-            Console.WriteLine("Player B is trying to connect");
+            Debug.WriteLine("Player B is trying to connect");
             try
             {
-                client = new TcpClient(ip, PORT);
+                client = new TcpClient();
+                await client.ConnectAsync(ip, PORT);
                 Debug.WriteLine("Connected to server.");
 
                 stream = client.GetStream();
                 receiveBuffer = new byte[1024];
-
-                RecieveMessage();
             }
             catch (SocketException ex)
             {
@@ -94,6 +95,12 @@ namespace GameProject.Networking
             }
 
         }
+
+        public bool IsConnected()
+        {
+            return client != null && client.Connected;
+        }
+
 
         public string RecieveMessage()
         {
