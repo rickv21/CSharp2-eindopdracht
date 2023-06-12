@@ -11,7 +11,7 @@ namespace GameProject.Networking
 {
     internal class Network
     {
-        private readonly int PORT = 5732;
+        private const int PORT = 5732;
 
         private char PlayerChar;
         private char OpponentChar;
