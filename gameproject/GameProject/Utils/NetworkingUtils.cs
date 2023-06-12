@@ -13,7 +13,7 @@ namespace GameProject.Utils
 
     public class NetworkingUtils
     {
-        private const String IpRegex = @"^(?:\d{1,3}\.){3}\d{1,3}$";
+        private const string IpRegex = @"^(?:\d{1,3}\.){3}\d{1,3}$";
 
         /**
          * Retrieves the local IPv4 address of the machine.
