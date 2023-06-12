@@ -54,7 +54,15 @@ public partial class MainPage : ContentPage
         {
             Title.Text = "Verbinding proberen te maken...";
             IpInput.IsEnabled = false;
-            this.network = new TcpConnection(false, ipInput);
+            try
+            {
+                this.network = new TcpConnection(false, ipInput);
+            }
+            catch (Exception ex)
+            {   
+                Title.Text = ex.Message;
+                IpInput.IsEnabled = true;
+            }
         }
     }
 
