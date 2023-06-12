@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -17,7 +18,8 @@ namespace GameProject.Networking
         private Task listenerTask;
         private TcpListener server;
         private TcpClient client;
-        private Socket webSocket;
+        private NetworkStream stream;
+        private byte[] receiveBuffer;
 
 
         public TcpConnection(bool isHost, string ip = null)
@@ -36,15 +38,25 @@ namespace GameProject.Networking
 
         public void StartServer()
         {
-            server = new TcpListener(IPAddress.Any, PORT);
-            server.Start();
-            Debug.WriteLine("Server started. Waiting for a client to connect...");
+            try
+            {
+                server = new TcpListener(IPAddress.Any, PORT);
+                server.Start();
+                Debug.WriteLine("Server started. Waiting for a client to connect...");
 
-            webSocket = server.AcceptSocket();
-            Debug.WriteLine("Client connected.");
+                client = server.AcceptTcpClient();
+                Debug.WriteLine("Client connected.");
 
+                stream = client.GetStream();
+                receiveBuffer = new byte[1024];
 
-            Debug.WriteLine(RecieveMessage());
+                RecieveMessage();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ex.Message}");
+            }
+            
         }
         public void StartClient(string ip)
         {
@@ -54,7 +66,10 @@ namespace GameProject.Networking
                 client = new TcpClient(ip, PORT);
                 Debug.WriteLine("Connected to server.");
 
-                webSocket = client.Client;
+                stream = client.GetStream();
+                receiveBuffer = new byte[1024];
+
+                RecieveMessage();
             }
             catch (SocketException ex)
             {
@@ -68,11 +83,10 @@ namespace GameProject.Networking
         {
             try
             {
-                byte[] data = Encoding.UTF8.GetBytes(msg);
-                webSocket.Send(data);
+                byte[] data = Encoding.ASCII.GetBytes(msg);
+                stream.Write(data, 0, data.Length);
 
                 Debug.WriteLine("Message sent: " + msg);
-
             }
             catch (Exception ex)
             {
@@ -83,11 +97,32 @@ namespace GameProject.Networking
 
         public string RecieveMessage()
         {
-            // TODO: Change the amount of bytes used for the recieve message
-            byte[] bytes = new byte[1024];
-            webSocket.Receive(bytes);
+            StringBuilder receivedData = new StringBuilder();
 
-            return Encoding.UTF8.GetString(bytes);
+            try
+            {
+                while (true)
+                {
+                    int bytesRead = stream.Read(receiveBuffer, 0, receiveBuffer.Length);
+                    if (bytesRead > 0)
+                    {
+                        string receivedMessage = Encoding.ASCII.GetString(receiveBuffer, 0, bytesRead);
+                        receivedData.Append(receivedMessage);
+                        // Process or display the received data here as needed
+                    }
+                    else
+                    {
+                        Console.WriteLine("Connection closed.");
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error receiving data: " + ex.Message);
+            }
+
+            return receivedData.ToString();
         }
 
         public void StopConnection()
