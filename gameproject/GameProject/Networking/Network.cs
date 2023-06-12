@@ -33,7 +33,7 @@ namespace GameProject.Networking
                 try
                 {
                     Console.WriteLine("Player B has connected!");
-                    client = new TcpClient(ip, this.PORT);
+                    client = new TcpClient(ip, PORT);
                     sock = client.Client;
                     MessageReceiver.RunWorkerAsync();
                 }
