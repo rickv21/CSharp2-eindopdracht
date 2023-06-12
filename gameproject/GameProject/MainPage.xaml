@@ -9,34 +9,56 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-
             <Label
-                Text="Hello, World!"
+                x:Name="Title"
+                Text="Kies wat je wilt doen."
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
                 HorizontalOptions="Center" />
 
             <Label
-                Text="Welcome to .NET Multi-platform App UI"
+                x:Name="Info"
+                Text=""
                 SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+                FontSize="24"
+                HorizontalOptions="Center"
+                IsVisible="false"/>
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+            <Entry
+                x:Name="IpInput"
+                Placeholder="127.0.0.1"
+                FontSize="Body"
+                MaximumWidthRequest="340"
+                MaxLength="17"
+                HorizontalTextAlignment="Center"
+                Completed="IpInput_Completed"
+                TextChanged="IpInput_TextChanged"
+                IsVisible="false"/>
+
+
+            <HorizontalStackLayout
+                x:Name="CenterLayout"
+                Spacing="25"
+                Padding="30"
+                HorizontalOptions="Center">
+
+
+                <Button
+                    x:Name="CreateHostBtn"
+                    Text="Host game"
+                    SemanticProperties.Hint="Click me if you want to start hosting your game."
+                    Clicked="OnCreateHostClicked"
+                    HorizontalOptions="CenterAndExpand" />
+
+                <Button
+                    x:Name="ConnectClientBtn"
+                    Text="Verbinding maken"
+                    Clicked="OnConnectClientClicked"
+                    SemanticProperties.Hint="Click me if you want to connect to someone else."
+                    HorizontalOptions="Center" />
+            </HorizontalStackLayout>
 
         </VerticalStackLayout>
     </ScrollView>
 
 </ContentPage>
-
