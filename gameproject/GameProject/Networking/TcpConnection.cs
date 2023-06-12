@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GameProject.Networking
 {
-    internal class TcpConnection: Exception
+    public class TcpConnection
     {
         private const int PORT = 5732;
-        private Task listenerTask = null;
 
-        private Socket webSocket;
-        private TcpListener server = null;
+        private Task listenerTask;
+        private TcpListener server;
         private TcpClient client;
+        private Socket webSocket;
+
 
         public TcpConnection(bool isHost, string ip = null)
         {
@@ -34,11 +36,15 @@ namespace GameProject.Networking
 
         public void StartServer()
         {
-            Debug.WriteLine("Host has been created!");
-            server = new TcpListener(System.Net.IPAddress.Any, PORT);
+            server = new TcpListener(IPAddress.Any, PORT);
             server.Start();
-            webSocket = server.AcceptSocket();
+            Debug.WriteLine("Server started. Waiting for a client to connect...");
 
+            webSocket = server.AcceptSocket();
+            Debug.WriteLine("Client connected.");
+
+
+            Debug.WriteLine(RecieveMessage());
         }
         public void StartClient(string ip)
         {
@@ -46,6 +52,8 @@ namespace GameProject.Networking
             try
             {
                 client = new TcpClient(ip, PORT);
+                Debug.WriteLine("Connected to server.");
+
                 webSocket = client.Client;
             }
             catch (SocketException ex)
@@ -58,8 +66,19 @@ namespace GameProject.Networking
 
         public void SendMessage(string msg)
         {
-            byte[] data = Encoding.UTF8.GetBytes(msg);
-            webSocket.Send(data);
+            try
+            {
+                byte[] data = Encoding.UTF8.GetBytes(msg);
+                webSocket.Send(data);
+
+                Debug.WriteLine("Message sent: " + msg);
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error sending message: " + ex.Message);
+            }
+
         }
 
         public string RecieveMessage()
@@ -73,9 +92,25 @@ namespace GameProject.Networking
 
         public void StopConnection()
         {
-            if (webSocket != null)
+            try
             {
-                webSocket.Close();
+                if (server != null)
+                {
+                    server.Stop();
+                }
+
+                if (client != null)
+                {
+                    client.Close();
+                }
+
+                listenerTask.Dispose();
+                Debug.WriteLine("Disconnected.");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error disconnecting: " + ex.Message);
             }
         }
     }

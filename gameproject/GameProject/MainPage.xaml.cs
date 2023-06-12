@@ -56,7 +56,9 @@ public partial class MainPage : ContentPage
             IpInput.IsEnabled = false;
             try
             {
-                this.network = new TcpConnection(false, ipInput);
+                network = new TcpConnection(false, ipInput);
+                Title.Text = "Connected!";
+                network.SendMessage("Hello");
             }
             catch (Exception ex)
             {   
