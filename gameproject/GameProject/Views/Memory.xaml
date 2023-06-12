@@ -17,6 +17,8 @@
                     <Button x:Name="BackButton" Text="Go back" WidthRequest="100" HorizontalOptions="Start" Clicked="OnBackButtonClicked" />
                 </Frame>
 
+                <Label x:Name="HighScoreLabel" Text="{Binding HighScore}" HorizontalOptions="Start" Margin="50,20,0,5" VerticalOptions="Start" Grid.Row="1" />
+
                 <Label x:Name="TurnLabel" Text="{Binding TurnText}" HorizontalOptions="Start" Margin="50,5,0,5" VerticalOptions="Start" Grid.Row="1" />
 
                 <ScrollView Grid.Row="1" Orientation="Vertical">

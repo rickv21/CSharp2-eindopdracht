@@ -20,23 +20,12 @@ namespace GameProject.Views
             MessagingCenter.Subscribe<MemoryViewModel, PopupMessage>(this, "DisplayPopup", async (sender, message) =>
             {
                 await DisplayAlert(message.Title, message.Message, "OK");
+                viewModel.ResetMemoryGame();
                 await Shell.Current.GoToAsync("//MainPage");
             });
 ;
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-
-            // Reset or clean up any necessary data
-            viewModel.ResetMemoryGame();
-        }
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {

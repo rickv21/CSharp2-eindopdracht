@@ -1,29 +1,20 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using GameProject.Memory;
 using GameProject.Models;
-using Plugin.Maui.Audio;
 using SharpHook;
 using SharpHook.Reactive;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace GameProject.ViewModels
 {
     public class MemoryViewModel : INotifyPropertyChanged
     {
-        private MemoryModel model;
+        private readonly MemoryModel model;
         private Grid memoryGrid;
         private string turnText;
-        private Dictionary<int, int> usedNumbers = new Dictionary<int, int>();
+        private string highScore;
         public event PropertyChangedEventHandler PropertyChanged;
         private bool debug = false;
-
-        //Audio
-        Stream normalBeep;
-        Stream goodBeep;
-        Stream badBeep;
 
         public string TurnText
         {
@@ -34,6 +25,19 @@ namespace GameProject.ViewModels
                 {
                     turnText = value;
                     OnPropertyChanged(nameof(TurnText));
+                }
+            }
+        }
+
+        public string HighScore
+        {
+            get { return highScore; }
+            set
+            {
+                if (highScore != value)
+                {
+                    highScore = value;
+                    OnPropertyChanged(nameof(HighScore));
                 }
             }
         }
@@ -62,88 +66,125 @@ namespace GameProject.ViewModels
             model = new MemoryModel();
             this.memoryGrid = memoryGrid;
 
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            normalBeep = assembly.GetManifestResourceStream("GameProject.Resources.Audio.beep.wav");
-            badBeep = assembly.GetManifestResourceStream("GameProject.Resources.Audio.beep-bad.wav");
-            goodBeep = assembly.GetManifestResourceStream("GameProject.Resources.Audio.beep-good.wav");
+            Stream normalBeep = AudioPlayer.LoadAudio("beep.wav");
+            Stream badBeep = AudioPlayer.LoadAudio("beep-bad.wav");
+            Stream goodBeep = AudioPlayer.LoadAudio("beep-good.wav");
+
+            model.Set("normalBeep", normalBeep);
+            model.Set("badBeep", badBeep);
+            model.Set("goodBeep", goodBeep);
 
             var hook = new SimpleGlobalHook();
 
             hook.KeyPressed += (s, e) =>
             {
                 var key = e.Data.KeyCode.ToString().Substring(2);
-                if(key == "Insert")
+                if(key == "F7")
                 {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         debug = !debug;
-                        if (debug)
-                        {
-                            foreach (CardButton button in memoryGrid.Children)
+
+                        CardButton lastButton = model.Get<CardButton>("lastClickedCard");
+
+                        foreach (CardButton button in memoryGrid.Children)
+                         {
+                            if (debug)
                             {
                                 button.ShowIcon();
                             }
-                        }
+                            else
+                            {
+                                button.ResetMarking();
+                            }
+                            if (button == lastButton)
+                            {
+                                button.ShowIcon();
+                                button.MarkSelection();
+                            }
+                 
+                         }
                     });
             
-                    }
+                } else if (key == "F8")
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        WinGame();
+                    });
+                    
+                }
             };
 
             hook.RunAsync();
             StartGame();
         }
 
+        /// <summary>
+        /// Resets the values of the game.
+        /// </summary>
         internal void ResetMemoryGame()
         {
+            Debug.WriteLine("reset");
             model.RemoveAll();
-            usedNumbers.Clear();
             memoryGrid.Clear();
             StartGame();
         }
-
+        
+        /// <summary>
+        /// Starts the game.
+        /// </summary>
         private void StartGame()
         {
-            TurnText = "Turn: 1";
             Debug.WriteLine("Starting game!!");
+            TurnText = "Turn: 1";
             SetupModelValues();
+            int score = LoadHighScore();
+            Debug.WriteLine(score);
+            HighScore = "High score: " + (score > 0 ? score : "not set yet");
             GenerateCards();
         }
 
-        private void SetupModelValues()
+        /// <summary>
+        /// Sets the default values in the mode.
+        /// </summary>
+        public void SetupModelValues()
         {
             model.Add("lastCreatedCard", -1);
             model.Add("animationDone", true);
-            //model.Add("isPaused", false);
             model.Add("foundNumbers", new List<int>());
             model.Add("turns", 1);
         }
 
-
-
-
+        /// <summary>
+        /// Generates the memory cards.
+        /// </summary>
         private void GenerateCards()
         {
-            GameProject.Memory.Card[,] cards = new GameProject.Memory.Card[6, 6];
+            Card[,] cards = new Card[6, 6];
+            Dictionary<int, int> usedNumbers = new Dictionary<int, int>();
             for (int row = 0; row < 6; row++)
             {
                 for (int col = 0; col < 6; col++)
                 {
-                    int randomValue = GetRandomValue();
-                    GameProject.Memory.Card card = new GameProject.Memory.Card(randomValue);
+                    int randomValue = GetRandomValue(usedNumbers);
+                    Card card = new Card(randomValue);
                     cards[row, col] = card;
                     Debug.WriteLine("Generated card: " + row + "-" + col);
                 }
             }
             model.Add("cards", cards);
             UpdateScreen(cards);
-            //Update screen??
         }
 
-        public void UpdateScreen(GameProject.Memory.Card[,] cards)
+        /// <summary>
+        /// Updates the screen with the memory cards.
+        /// </summary>
+        /// <param name="cards">The memory cards to be drawn on screen.</param>
+        public void UpdateScreen(Card[,] cards)
         {
             // Clear existing buttons from the grid
             memoryGrid.Children.Clear();
-
             memoryGrid.ColumnSpacing = 25;
             memoryGrid.RowSpacing = 25;
             memoryGrid.Padding = new Thickness(50, 50, 50, 50);
@@ -152,9 +193,9 @@ namespace GameProject.ViewModels
             {
                 for (int col = 0; col < cards.GetLength(1); col++)
                 {
-                    GameProject.Memory.Card card = cards[row, col];
+                    Card card = cards[row, col];
                     Debug.WriteLine("Loading card button: " + row + "-" + col);
-                    GameProject.Memory.CardButton button = new(card)
+                    CardButton button = new(card)
                     {
                         // Customize button properties
                         Margin = new Thickness(0),
@@ -176,27 +217,13 @@ namespace GameProject.ViewModels
 
         }
 
-        private void OnKey(KeyboardHookEventArgs e, IReactiveGlobalHook hook)
-        {
-            Debug.WriteLine("test");
-            Debug.WriteLine(e.Data.KeyChar);
-        }
-
-
-        /* private void AddHoverEvents()
-         {
-             foreach (var child in memoryGrid.Children)
-             {
-                 if (child is CardButton button)
-                 {
-                     button.PointerEntered += (sender, e) => button.BackgroundColor = new Color(201, 160, 224);
-                     button.PointerExited += (sender, e) => button.BackgroundColor = new Color(174, 83, 212);
-                 }
-             }
-         }*/
-
-
-        private int GetRandomValue()
+        /// <summary>
+        /// Calculates a random number value for the memory cards.
+        /// A specific number can only be generated twice.
+        /// </summary>
+        /// <param name="usedNumbers">A Dictionary containing numers that are already used.</param>
+        /// <returns></returns>
+        private int GetRandomValue(Dictionary<int, int> usedNumbers)
         {
             int maxSize = 6 * 6 / 2;
             Random random = new Random();
@@ -207,13 +234,10 @@ namespace GameProject.ViewModels
             {
                 if (usedNumbers.Count == maxSize)
                 {
-                    return GetRandomValue();
+                    return GetRandomValue(usedNumbers);
                 }
 
-                // if (App.IsDebug)
-                // {
                 Debug.WriteLine("Contains: 0 - " + randomNumber);
-                //  }
 
                 usedNumbers[randomNumber] = 1;
                 model.Add("lastCreatedCard", randomNumber);
@@ -222,10 +246,7 @@ namespace GameProject.ViewModels
 
             if (randomNumber == model.Get<int>("lastCreatedCard"))
             {
-                //  if (App.IsDebug)
-                // {
                 Debug.WriteLine("Previous match - " + randomNumber);
-                //  }
 
                 int tries = 0;
                 if (model.Contains("tries" + randomNumber))
@@ -247,53 +268,53 @@ namespace GameProject.ViewModels
                     }
                 }
 
-                return GetRandomValue();
+                return GetRandomValue(usedNumbers);
             }
 
             if (usedNumbers[randomNumber] == 1)
             {
-                // if (App.IsDebug)
-                // {
                 Debug.WriteLine("Contains: 1 - " + randomNumber);
-                // }
 
                 usedNumbers[randomNumber] = 2;
                 model.Add("lastCreatedCard", randomNumber);
                 return randomNumber;
             }
 
-            return GetRandomValue();
+            return GetRandomValue(usedNumbers);
         }
 
-        public async Task ClickCardAsync(GameProject.Memory.CardButton button)
+        /// <summary>
+        /// Handles the clicking of a card.
+        /// </summary>
+        /// <param name="button">The CardButton that was pressed.</param>
+        /// <returns></returns>
+        public async Task ClickCardAsync(CardButton button)
         {
             Debug.WriteLine("Clicked button! - " + button.GetCard().GetValue());
             if (!model.Get<bool>("animationDone"))
             {
-                //Als de foute kaart animatie nog bezig is, doe dan niets.
+                //If the wrong card animation is still playing, do nothing..
                 return;
             }
-            //Laat de afbeelding van de knop zien.
+            //Show the value of the button.
             button.ShowIcon();
 
-            GameProject.Memory.CardButton lastButton = model.Get<GameProject.Memory.CardButton>("lastClickedCard");
+            CardButton lastButton = model.Get<CardButton>("lastClickedCard");
 
-            //Wanneer er geen andere knop geselecteerd is.
+            //When no other card has been selected.
             if (lastButton == null)
             {
-                playSound(normalBeep);
+                AudioPlayer.PlaySound(model.Get<Stream>("normalBeep"), 1);
                 model.Add("lastClickedCard", button);
                 button.MarkSelection();
                 button.IsEnabled = false;
                 return;
             }
 
-            //Wanneer er 2 buttons met dezelfde afbeelding geselecteerd zijn. (Goed)
+            //When 2 cards with the same value have been selected. (Good)
             if (button.GetCard().GetValue() == lastButton.GetCard().GetValue())
             {
-                playSound(goodBeep);
-
-                //new AudioPlayer("beep-positief-2.wav").play();
+                AudioPlayer.PlaySound(model.Get<Stream>("goodBeep"), 1);
                 button.MarkCorrect();
                 button.IsEnabled = false;
                 lastButton.MarkCorrect();
@@ -305,107 +326,112 @@ namespace GameProject.ViewModels
                 if (list.Count >= maxSize)
                 {
                     //If the game is complete.
-
-                    SaveHighScore();
-                    //new AudioPlayer("win.wav").play();
-
-                    //pop up
-                    var popupMessage = new PopupMessage
-                    {
-                        Title = "Win",
-                        Message = "Je hebt gewonnen"
-                    };
-
-                    // Publish the popup message
-                    MessagingCenter.Send(this, "DisplayPopup", popupMessage);
-
-                    //TODO: Return to main menu.
+                    WinGame();
+                    return;
                 }
                 model.Add("foundNumbers", list);
-
             }
             else
             {
-                playSound(badBeep);
-              
+                AudioPlayer.PlaySound(model.Get<Stream>("badBeep"), 1);
                 //When the two cards do not match. (Error)
                 model.Add("animationDone", false);
                 button.MarkWrong();
                 button.IsEnabled = false;
                 lastButton.MarkWrong();
 
-                GameProject.Memory.CardButton finalButton = lastButton;
                 //Keep the card red for a bit.
-
                 await Task.Delay(750);
 
                 button.IsEnabled = true;
                 button.ResetMarking();
-                finalButton.ResetMarking();
-                finalButton.IsEnabled = true;
+                lastButton.ResetMarking();
+                lastButton.IsEnabled = true;
                 model.Remove("lastClickedCard");
                 model.Add("animationDone", true);
-
             }
 
             int turn = model.Get<int>("turns") + 1;
-            Debug.WriteLine(turn);  
+            Debug.WriteLine("Turn: " + turn);  
             TurnText = "Turn: " + turn;
             model.Set("turns", turn);
         }
 
-        private void playSound(Stream stream)
+        /// <summary>
+        /// Called when the game is won.
+        /// </summary>
+        private void WinGame()
         {
-            if (stream != null)
+            int highScore = model.Get<int>("highScore");
+            int turn = model.Get<int>("turns");
+
+            Debug.WriteLine($"{highScore} turn {turn}");
+
+            SaveHighScore();
+
+            //Pop-up
+            var popupMessage = new PopupMessage
             {
-                var audioPlayer = AudioManager.Current.CreatePlayer(stream);
-                audioPlayer.Play();
-            }
+                Title = "Winner",
+                Message = "You have won" + (turn < highScore ? " and got a new High Score!" : "!")
+            };
+
+            // Publish the popup message
+            MessagingCenter.Send(this, "DisplayPopup", popupMessage);
         }
 
+        /// <summary>
+        /// Save the high score to the score.txt file.
+        /// </summary>
         protected void SaveHighScore()
         {
-            int tries = model.Get<int>("turns");
+            int turn = model.Get<int>("turns");
             try
             {
-                string executablePath = AppDomain.CurrentDomain.BaseDirectory;
-                string filePath = Path.Combine(Path.GetDirectoryName(executablePath), "score.txt");
-                //if (App.IsDebug())
-                // {
-                //     Console.WriteLine(filePath);
-                // }
+                string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string fileName = "score.txt";
+                string filePath = Path.Combine(documentPath, fileName);
+
+                Debug.WriteLine(filePath);
+
+
                 if (!File.Exists(filePath))
                 {
                     File.Create(filePath).Close();
                 }
-                // Whether the score exists in the file.
+
                 bool exists = false;
+                List<string> fileContent = new List<string>();
 
                 // Read the contents of score.txt
-                List<string> fileContent = new List<string>(File.ReadAllLines(filePath));
-                // Loop through the text lines.
-                for (int i = 0; i < fileContent.Count; i++)
+                if (new FileInfo(filePath).Length != 0)
                 {
-                    // If the current line starts with "memoryScore".
-                    if (fileContent[i].StartsWith("memoryScore"))
+                    fileContent = new List<string>(File.ReadAllLines(filePath));
+
+                    // Loop through the text lines.
+                    for (int i = 0; i < fileContent.Count; i++)
                     {
-                        // The score exists in the file.
-                        exists = true;
-                        // If the new time is less than the previously stored time.
-                        if (tries < int.Parse(fileContent[i].Split(": ")[1]))
+                        // If the current line starts with "memoryScore".
+                        if (fileContent[i].StartsWith("memoryScore"))
                         {
-                            // Update it with the new time.
-                            fileContent[i] = "memoryScore: " + tries;
+                            exists = true;
+                            // If the new time is less than the previously stored time.
+                            if (turn < int.Parse(fileContent[i].Split(": ")[1]))
+                            {
+                                // Update it with the new time.
+                                fileContent[i] = "memoryScore: " + turn;
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
-                // If the time doesn't exist in the file, for example, when the game is played for the first time.
+
                 if (!exists)
                 {
                     // Add it.
-                    fileContent.Add("memoryScore: " + tries);
+                    fileContent.Add("memoryScore: " + turn);
                 }
+
                 // Write the changes to score.txt
                 File.WriteAllLines(filePath, fileContent);
             }
@@ -415,37 +441,44 @@ namespace GameProject.ViewModels
             }
         }
 
+        public MemoryModel GetModel()
+        {
+            return model;
+        }
 
-        public void LoadHighScore()
+
+        /// <summary>
+        /// Loads the high score from the score.txt file and adds it to the model.
+        /// </summary>
+        /// <returns>The high score.</returns>
+        public int LoadHighScore()
         {
             int score = 0;
             try
             {
-                string executablePath = AppDomain.CurrentDomain.BaseDirectory;
+                string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string fileName = "score.txt";
+                string filePath = Path.Combine(documentPath, fileName);
 
-                string filePath = Path.Combine(Path.GetDirectoryName(executablePath), "score.txt");
                 List<string> fileContent = new List<string>(File.ReadAllLines(filePath));
-                int length = 0;
                 foreach (string line in fileContent)
                 {
                     // If the current line starts with "memoryScore".
                     if (line.StartsWith("memoryScore"))
                     {
                         score = int.Parse(line.Split(": ")[1]);
+                        break;
                         // The score exists in the file.
-                        length++;
                     }
                 }
+                model.Set("highScore", score);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
+            return score;
         }
-
-
-
-
 
         public async void ShowPopup(string title, string message)
         {
