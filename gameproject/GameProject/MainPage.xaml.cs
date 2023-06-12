@@ -1,13 +1,11 @@
 ﻿using GameProject.Networking;
 using GameProject.Utils;
 
-using System.Diagnostics;
-
 namespace GameProject;
 
 public partial class MainPage : ContentPage
 {
-    private Network network;
+    private TcpConnection network;
 
     public MainPage()
     {
@@ -21,7 +19,7 @@ public partial class MainPage : ContentPage
         Info.Text = $"IP: {NetworkingUtils.GetLocalIPAddress()}";
         Info.IsVisible = true;
 
-        this.network = new Network(true);
+        this.network = new TcpConnection(true);
     }
 
     private void OnConnectClientClicked(object sender, EventArgs e)
@@ -45,7 +43,7 @@ public partial class MainPage : ContentPage
                 }
             }
         }
-        
+
     }
 
     private void IpInput_Completed(object sender, EventArgs e)
@@ -56,7 +54,7 @@ public partial class MainPage : ContentPage
         {
             Title.Text = "Verbinding proberen te maken...";
             IpInput.IsEnabled = false;
-            this.network = new Network(false, ipInput);
+            this.network = new TcpConnection(false, ipInput);
         }
     }
 

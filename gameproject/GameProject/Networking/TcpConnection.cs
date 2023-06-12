@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GameProject.Networking
 {
-    internal class Network
+    internal class TcpConnection
     {
         private const int PORT = 5732;
 
@@ -20,7 +20,7 @@ namespace GameProject.Networking
         private TcpClient client;
         private BackgroundWorker MessageReceiver = new BackgroundWorker();
 
-        public Network(bool isHost, string ip = null)
+        public TcpConnection(bool isHost, string ip = null)
         {
 
             if (isHost)
