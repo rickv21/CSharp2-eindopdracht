@@ -10,18 +10,30 @@ namespace GameProject.Models
 {
     public class CheckersSquare : INotifyPropertyChanged
     {
-        private Color _color;
+        private Color _tileColor;
         private Color _pieceColor;
         private bool _isKing;
         public event PropertyChangedEventHandler PropertyChanged;
 
-
-        public Color Color
+        public CheckersSquare(Color tileColor, Color pieceColor, bool isKing)
         {
-            get => _color;
+            
+            this._tileColor= tileColor;
+            this._pieceColor = pieceColor;
+            this._isKing = isKing;
+        }
+
+        public CheckersSquare()
+        {
+
+        }
+
+        public Color TileColor
+        {
+            get => _tileColor;
             set
             {
-                _color = value;
+                _tileColor = value;
                 OnPropertyChanged();
             }
         }
