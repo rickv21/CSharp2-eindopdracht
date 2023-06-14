@@ -15,6 +15,7 @@ namespace GameProject.ViewModels
         private CheckersModel model;
         private Grid checkersGrid;
         private string turnText;
+        private CheckersSquareButton selectedSquare;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string TurnText
@@ -43,6 +44,19 @@ namespace GameProject.ViewModels
             }
         }
 
+        public CheckersSquareButton SelectedSquare
+        {
+            get => selectedSquare;
+            set
+            {
+                if (selectedSquare != value)
+                {
+                    selectedSquare = value;
+                    OnPropertyChanged(nameof(CheckersGrid));
+                }
+            }
+        }
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -65,10 +79,10 @@ namespace GameProject.ViewModels
 
         private void GenerateBoard()
         {
-            CheckersSquare[,] squares = new CheckersSquare[6, 6];
-            for (var row = 1; row < 9; row++)
+            CheckersSquare[,] squares = new CheckersSquare[8, 8];
+            for (var row = 0; row < 8; row++)
             {
-                for (var col = 1; col < 9; col++)
+                for (var col = 0; col < 8; col++)
                 {
                     Debug.WriteLine("Generated square: " + row + "-" + col);
 
@@ -84,11 +98,11 @@ namespace GameProject.ViewModels
                         square.TileColor = Colors.Black;
                     }
 
-                    if (row < 3 && square.PieceColor.Equals(Colors.Black))
+                    if (row < 3 && square.TileColor.Equals(Colors.Black))
                     {
                         square.PieceColor = Colors.Red;
                     }
-                    else if (row > 4 && square.PieceColor.Equals(Colors.Black))
+                    else if (row > 4 && square.TileColor.Equals(Colors.Black))
                     {
                         square.PieceColor = Colors.Blue;
                     }
@@ -111,11 +125,18 @@ namespace GameProject.ViewModels
                 {
                     CheckersSquare square = squares[row, col];
                     Debug.WriteLine("Loading card button: " + row + "-" + col);
+                    CheckersSquareButton button = new(square)
+                    {
+                        Padding = new Thickness(0),
+                        Margin = new Thickness(0),
+                        CornerRadius = 0,
+                        BorderWidth = 0
+                    };
+                    button.Command = new Command(async () => await ClickSquareAsync(button));
 
-                    // Add square to the grid
-                    checkersGrid.Children.Add(square);
-                    Grid.SetRow(square, row);
-                    Grid.SetColumn(square, col);
+                    checkersGrid.Children.Add(button);
+                    Grid.SetRow( button, row);
+                    Grid.SetColumn(button, col);
                 }
             }
 
@@ -127,6 +148,23 @@ namespace GameProject.ViewModels
             SetupModelValues();
         }
 
-        private void SetupModelValues() { }
+        private void SetupModelValues()
+        {
+            model.Add("playerTurn", 0);
+            model.Add("squareSelected", false);
+        }
+
+        public async Task ClickSquareAsync(CheckersSquareButton button)
+        {
+            Debug.WriteLine("Clicked button! - " + button.GetSquare());
+            
+            //Show the value of the button.
+            if (this.selectedSquare != null)
+            {
+                this.selectedSquare.ResetSelected();
+            }
+            this.selectedSquare = button;
+            button.ShowPiece();
+        }
     }
 }
