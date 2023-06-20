@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GameProject.Models;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace GameProject.ViewModels
 {
@@ -84,10 +86,8 @@ namespace GameProject.ViewModels
             {
                 for (var col = 0; col < 8; col++)
                 {
-                    Debug.WriteLine("Generated square: " + row + "-" + col);
 
                     CheckersSquare square = new CheckersSquare();
-
 
                     if ((row + col) % 2 == 0)
                     {
@@ -100,11 +100,15 @@ namespace GameProject.ViewModels
 
                     if (row < 3 && square.TileColor.Equals(Colors.Black))
                     {
-                        square.PieceColor = Colors.Red;
+                        square.Piece = new CheckersPiece(Colors.Red);
                     }
                     else if (row > 4 && square.TileColor.Equals(Colors.Black))
                     {
-                        square.PieceColor = Colors.Blue;
+                        square.Piece = new CheckersPiece(Colors.Blue);
+                    }
+                    else
+                    {
+                        square.Piece = new CheckersPiece(Colors.Transparent);
                     }
                     squares[row, col] = square;
                 }
@@ -124,16 +128,25 @@ namespace GameProject.ViewModels
                 for (int col = 0; col < squares.GetLength(1); col++)
                 {
                     CheckersSquare square = squares[row, col];
-                    Debug.WriteLine("Loading card button: " + row + "-" + col);
                     CheckersSquareButton button = new(square)
                     {
                         Padding = new Thickness(0),
                         Margin = new Thickness(0),
                         CornerRadius = 0,
-                        BorderWidth = 0
+                        //BorderWidth = 0
                     };
-                    button.Command = new Command(async () => await ClickSquareAsync(button));
-
+                    //button.Command = new Command(async () => await ClickSquareAsync(button));
+                    TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+                    tapGestureRecognizer.Tapped += async (s, e) =>
+                    {
+                        if (this.selectedSquare != null)
+                        {
+                            this.selectedSquare.ResetSelected();
+                        }
+                        this.selectedSquare = button;
+                        button.ShowPiece();
+                    };
+                    button.addGestureRecognizer(tapGestureRecognizer);
                     checkersGrid.Children.Add(button);
                     Grid.SetRow( button, row);
                     Grid.SetColumn(button, col);
@@ -154,17 +167,9 @@ namespace GameProject.ViewModels
             model.Add("squareSelected", false);
         }
 
-        public async Task ClickSquareAsync(CheckersSquareButton button)
+        public void MovePiece()
         {
-            Debug.WriteLine("Clicked button! - " + button.GetSquare());
-            
-            //Show the value of the button.
-            if (this.selectedSquare != null)
-            {
-                this.selectedSquare.ResetSelected();
-            }
-            this.selectedSquare = button;
-            button.ShowPiece();
+
         }
     }
 }

@@ -5,27 +5,24 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace GameProject.Models
 {
     public class CheckersSquare : INotifyPropertyChanged
     {
         private Color _tileColor;
-        private Color _pieceColor;
-        private bool _isKing;
+        private CheckersPiece _piece;
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public CheckersSquare(Color tileColor, Color pieceColor, bool isKing)
-        {
-            
-            this._tileColor= tileColor;
-            this._pieceColor = pieceColor;
-            this._isKing = isKing;
-        }
 
         public CheckersSquare()
         {
+        }
 
+        public CheckersSquare(CheckersPiece piece)
+        {
+            this._piece = piece;
         }
 
         public Color TileColor
@@ -38,25 +35,17 @@ namespace GameProject.Models
             }
         }
 
-        public Color PieceColor
+        public CheckersPiece Piece
         {
-            get => _pieceColor;
+            get => _piece;
             set
             {
-                _pieceColor = value;
+                _piece = value;
                 OnPropertyChanged();
             }
+
         }
 
-        public bool IsKing
-        {
-            get => _isKing;
-            set
-            {
-                _isKing = value;
-                OnPropertyChanged();
-            }
-        }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
