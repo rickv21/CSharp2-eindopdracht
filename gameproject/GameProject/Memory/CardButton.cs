@@ -14,6 +14,17 @@ namespace GameProject.Memory
             IsEnabled = false;
         }
 
+
+        private void OnPointerEntered(object sender, EventArgs e)
+        {
+            VisualStateManager.GoToState(this, "Hover");
+        }
+
+        private void OnPointerExited(object sender, EventArgs e)
+        {
+            VisualStateManager.GoToState(this, "Normal");
+        }
+
         public Card GetCard()
         {
             return card;
@@ -39,7 +50,7 @@ namespace GameProject.Memory
 
         public void ResetMarking()
         {
-            Text = "Memory";
+            Text = "??";
             //Text = card.GetValue().ToString();
             BackgroundColor = Colors.MediumPurple;
             BorderWidth = 1;
