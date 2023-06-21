@@ -1,7 +1,7 @@
 ﻿using GameProject.ViewModels;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.PlatformConfiguration;
-
+using System.Diagnostics;
 
 namespace GameProject.Views
 {
@@ -17,7 +17,7 @@ namespace GameProject.Views
            // BackButton.Command = new Command(() => );
             BindingContext = viewModel;
 
-            MessagingCenter.Subscribe<MemoryViewModel, PopupMessage>(this, "DisplayPopup", async (sender, message) =>
+            MessagingCenter.Subscribe<MemoryViewModel, PopupMessage>(this, "MemoryPopup", async (sender, message) =>
             {
                 await DisplayAlert(message.Title, message.Message, "OK");
                 viewModel.ResetMemoryGame();
@@ -29,6 +29,7 @@ namespace GameProject.Views
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
+            viewModel.ResetMemoryGame();
             await Shell.Current.GoToAsync("//MainPage");
         }
 

@@ -28,7 +28,7 @@ namespace GameProject
         /// </summary>
         /// <param name="stream">The stream of the audio.</param>
         /// <param name="volume">The volume of the audio, betweet 0 and 1.</param>
-        public static void PlaySound(Stream stream, int volume)
+        public static void PlaySound(Stream stream, double volume)
         {
             if (stream != null)
             {

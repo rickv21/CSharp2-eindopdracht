@@ -66,57 +66,7 @@ namespace GameProject.ViewModels
             model = new MemoryModel();
             this.memoryGrid = memoryGrid;
 
-            Stream normalBeep = AudioPlayer.LoadAudio("beep.wav");
-            Stream badBeep = AudioPlayer.LoadAudio("beep-bad.wav");
-            Stream goodBeep = AudioPlayer.LoadAudio("beep-good.wav");
 
-            model.Set("normalBeep", normalBeep);
-            model.Set("badBeep", badBeep);
-            model.Set("goodBeep", goodBeep);
-
-            var hook = new SimpleGlobalHook();
-
-            hook.KeyPressed += (s, e) =>
-            {
-                var key = e.Data.KeyCode.ToString().Substring(2);
-                if(key == "F7")
-                {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        debug = !debug;
-
-                        CardButton lastButton = model.Get<CardButton>("lastClickedCard");
-
-                        foreach (CardButton button in memoryGrid.Children)
-                         {
-                            if (debug)
-                            {
-                                button.ShowIcon();
-                            }
-                            else
-                            {
-                                button.ResetMarking();
-                            }
-                            if (button == lastButton)
-                            {
-                                button.ShowIcon();
-                                button.MarkSelection();
-                            }
-                 
-                         }
-                    });
-            
-                } else if (key == "F8")
-                {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        WinGame();
-                    });
-                    
-                }
-            };
-
-            hook.RunAsync();
             StartGame();
         }
 
@@ -136,6 +86,58 @@ namespace GameProject.ViewModels
         /// </summary>
         private void StartGame()
         {
+            Stream normalBeep = AudioPlayer.LoadAudio("beep.wav");
+            Stream badBeep = AudioPlayer.LoadAudio("beep-bad.wav");
+            Stream goodBeep = AudioPlayer.LoadAudio("beep-good.wav");
+
+            model.Set("normalBeep", normalBeep);
+            model.Set("badBeep", badBeep);
+            model.Set("goodBeep", goodBeep);
+
+            var hook = new SimpleGlobalHook();
+
+            hook.KeyPressed += (s, e) =>
+            {
+                var key = e.Data.KeyCode.ToString().Substring(2);
+                if (key == "F7")
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        debug = !debug;
+
+                        CardButton lastButton = model.Get<CardButton>("lastClickedCard");
+
+                        foreach (CardButton button in memoryGrid.Children)
+                        {
+                            if (debug)
+                            {
+                                button.ShowIcon();
+                            }
+                            else
+                            {
+                                button.ResetMarking();
+                            }
+                            if (button == lastButton)
+                            {
+                                button.ShowIcon();
+                                button.MarkSelection();
+                            }
+
+                        }
+                    });
+
+                }
+                else if (key == "F8")
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        WinGame();
+                    });
+
+                }
+            };
+
+            hook.RunAsync();
             Debug.WriteLine("Starting game!!");
             TurnText = "Turn: 1";
             SetupModelValues();
@@ -304,7 +306,7 @@ namespace GameProject.ViewModels
             //When no other card has been selected.
             if (lastButton == null)
             {
-                AudioPlayer.PlaySound(model.Get<Stream>("normalBeep"), 1);
+                AudioPlayer.PlaySound(model.Get<Stream>("normalBeep"), 0.05);
                 model.Add("lastClickedCard", button);
                 button.MarkSelection();
                 button.IsEnabled = false;
@@ -314,7 +316,7 @@ namespace GameProject.ViewModels
             //When 2 cards with the same value have been selected. (Good)
             if (button.GetCard().GetValue() == lastButton.GetCard().GetValue())
             {
-                AudioPlayer.PlaySound(model.Get<Stream>("goodBeep"), 1);
+                AudioPlayer.PlaySound(model.Get<Stream>("goodBeep"), 0.05);
                 button.MarkCorrect();
                 button.IsEnabled = false;
                 lastButton.MarkCorrect();
@@ -333,7 +335,7 @@ namespace GameProject.ViewModels
             }
             else
             {
-                AudioPlayer.PlaySound(model.Get<Stream>("badBeep"), 1);
+                AudioPlayer.PlaySound(model.Get<Stream>("badBeep"), 0.05);
                 //When the two cards do not match. (Error)
                 model.Add("animationDone", false);
                 button.MarkWrong();
@@ -377,7 +379,7 @@ namespace GameProject.ViewModels
             };
 
             // Publish the popup message
-            MessagingCenter.Send(this, "DisplayPopup", popupMessage);
+            MessagingCenter.Send(this, "MemoryPopup", popupMessage);
         }
 
         /// <summary>
