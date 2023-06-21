@@ -62,6 +62,16 @@ namespace GameProject.Models
             }
         }
 
+        public void SetColor(Color color)
+        {
+            this._piece.Fill = new SolidColorBrush(color);
+        }
+
+        public Brush GetFillColor()
+        {
+            return this._piece.Fill;
+        }
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

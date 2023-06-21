@@ -14,6 +14,7 @@ namespace GameProject.Models
     {
         private Color _tileColor;
         private CheckersPiece _piece;
+        private bool _isBlack;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public CheckersSquare()
@@ -46,8 +47,18 @@ namespace GameProject.Models
 
         }
 
+        public bool IsBlack
+        {
+            get => _isBlack;
+            set
+            {
+                _isBlack = value;
+                OnPropertyChanged();
+            }
+        }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
