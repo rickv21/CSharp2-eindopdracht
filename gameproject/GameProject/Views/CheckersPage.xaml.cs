@@ -16,8 +16,14 @@ namespace GameProject
                 InitializeComponent();
                 viewModel = new CheckersViewModel(CheckersGrid);
                 BindingContext = viewModel;
-                //AddCheckersPieces();
-            }
+
+                MessagingCenter.Subscribe<CheckersViewModel, PopupMessage>(this, "CheckersPopup", async (sender, message) =>
+                {
+                    await DisplayAlert(message.Title, message.Message, "OK");
+                    viewModel.ResetCheckersGame();
+                    await Shell.Current.GoToAsync("//MainPage");
+                });
+             }
         }
 
 }

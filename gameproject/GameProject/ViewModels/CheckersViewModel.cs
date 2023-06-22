@@ -205,11 +205,22 @@ namespace GameProject.ViewModels
 
         public bool MovePiece(CheckersSquareButton startSquare, CheckersSquareButton endSquare)
         {
-            IsValidMove(startSquare, endSquare);
+            //IsValidMove(startSquare, endSquare);
             if (endSquare.BackgroundColor.Equals(Color.FromRgb(152, 143, 143)))
             {
                 endSquare.ShowPiece(startSquare.GetSquare().Piece.Color);
                 startSquare.HidePiece();
+                if (Math.Abs(endSquare.GetRow() - startSquare.GetRow()) > 1)
+                {
+                    CheckersSquareButton squareBtn = _model.Get<CheckersSquareButton>("rightNeighbor");
+                    if (endSquare.GetCol() < startSquare.GetCol())
+                    {
+                        squareBtn = _model.Get<CheckersSquareButton>("leftNeighbor");
+                    }
+                        
+                    squareBtn.HidePiece();
+                }
+                CheckForWin();
                 UpdateSquareGestureRecognizers();
                 return true;
             }
@@ -228,20 +239,20 @@ namespace GameProject.ViewModels
 
             if (squareButton.GetSquare().Piece.Color.Equals(Colors.Black))
             {
-                CheckForRedNeighborPieces(squareButton);
+                CheckForNeighborPieces(squareButton, -1);
             }
             else
             {
-                CheckForBlackNeighborPieces(squareButton);
+                CheckForNeighborPieces(squareButton, 1);
             }
         }
 
-        public void CheckForRedNeighborPieces(CheckersSquareButton squareButton)
+        public void CheckForNeighborPieces(CheckersSquareButton squareButton, int rowOffset)
         {
             var sourceRow = squareButton.GetRow();
             var sourceCol = squareButton.GetCol();
             var opponentColor = squareButton.GetSquare().Piece.Color == Colors.Red ? Colors.Black : Colors.Red;
-            var targetRow = sourceRow - 1;
+            var targetRow = sourceRow + rowOffset;
             var targetColLeft = sourceCol - 1; 
             var targetColRight = sourceCol + 1; 
 
@@ -250,11 +261,12 @@ namespace GameProject.ViewModels
                 var leftNeighbor = _squareButtons[targetRow, targetColLeft];
                 if (leftNeighbor.HasPiece() && leftNeighbor.GetSquare().Piece.Color == opponentColor)
                 {
-                    var jumpRow = targetRow - 1;
+                    var jumpRow = targetRow + rowOffset;
                     var jumpCol = targetColLeft - 1;
                     if (jumpRow >= 0 && jumpRow < 8 && jumpCol >= 0 && jumpCol < 8 && !_squareButtons[jumpRow, jumpCol].HasPiece())
                     {
                         _squareButtons[jumpRow, jumpCol].SelectPiece();
+                        _model.Add("leftNeighbor", leftNeighbor); 
                     }
                 }
             }
@@ -264,54 +276,55 @@ namespace GameProject.ViewModels
                 var rightNeighbor = _squareButtons[targetRow, targetColRight];
                 if (rightNeighbor.HasPiece() && rightNeighbor.GetSquare().Piece.Color == opponentColor)
                 {
-                    var jumpRow = targetRow - 1;
+                    var jumpRow = targetRow + rowOffset;
                     var jumpCol = targetColRight + 1;
                     if (jumpRow >= 0 && jumpRow < 8 && jumpCol >= 0 && jumpCol < 8 && !_squareButtons[jumpRow, jumpCol].HasPiece())
                     {
                         _squareButtons[jumpRow, jumpCol].SelectPiece();
+                        _model.Add("rightNeighbor", rightNeighbor);
                     }
                 }
             }
         }
 
-        public void CheckForBlackNeighborPieces(CheckersSquareButton squareButton)
+        private void CheckForWin()
         {
-            var sourceRow = squareButton.GetRow();
-            var sourceCol = squareButton.GetCol();
-            var opponentColor = squareButton.GetSquare().Piece.Color == Colors.Red ? Colors.Black : Colors.Red;
-            var targetRow = sourceRow + 1; // Up direction
-            var targetColLeft = sourceCol - 1; // Left diagonal
-            var targetColRight = sourceCol + 1; // Right diagonal
-
-            if (targetRow >= 0 && targetRow < 8 && targetColLeft >= 0 && targetColLeft < 8)
+            int blackCount = 0;
+            int redCount = 0;
+            foreach (var squareButton in _squareButtons)
             {
-                var leftNeighbor = _squareButtons[targetRow, targetColLeft];
-                if (leftNeighbor.HasPiece() && leftNeighbor.GetSquare().Piece.Color == opponentColor)
+                if (squareButton.GetSquare().Piece.Color.Equals(Colors.Black))
                 {
-                    var jumpRow = targetRow + 1;
-                    var jumpCol = targetColLeft - 1;
-                    if (jumpRow >= 0 && jumpRow < 8 && jumpCol >= 0 && jumpCol < 8 && !_squareButtons[jumpRow, jumpCol].HasPiece())
-                    {
-                        _squareButtons[jumpRow, jumpCol].SelectPiece();
-                    }
+                    blackCount++;
+                }
+
+                if (squareButton.GetSquare().Piece.Color.Equals(Colors.Red))
+                {
+                    redCount++;
                 }
             }
 
-            if (targetRow >= 0 && targetRow < 8 && targetColRight >= 0 && targetColRight < 8)
+            if (blackCount == 0)
             {
-                var rightNeighbor = _squareButtons[targetRow, targetColRight];
-                if (rightNeighbor.HasPiece() && rightNeighbor.GetSquare().Piece.Color == opponentColor)
-                {
-                    var jumpRow = targetRow + 1;
-                    var jumpCol = targetColRight + 1;
-                    if (jumpRow >= 0 && jumpRow < 8 && jumpCol >= 0 && jumpCol < 8 && !_squareButtons[jumpRow, jumpCol].HasPiece())
-                    {
-                        _squareButtons[jumpRow, jumpCol].SelectPiece();
-                    }
-                }
+                showWinMSg("Red");
+            }
+
+            if (redCount == 0)
+            {
+                showWinMSg("Black");
             }
         }
 
+        private void showWinMSg(String winner)
+        {
+            var popupMessage = new PopupMessage()
+            {
+                Title = "Winner",
+                Message = winner + " has won"
+            };
+            MessagingCenter.Send(this, "CheckersPopup", popupMessage);
+
+        }
 
         private void ResetSelected()
         {
@@ -336,7 +349,6 @@ namespace GameProject.ViewModels
                         {
                             ResetSelected();
                         }
-                        //if(this._selectedSquare
                         this._selectedSquare = squareButton;
                         squareButton.SelectPiece();
                         ShowPossibleMoves(squareButton);
@@ -360,8 +372,6 @@ namespace GameProject.ViewModels
                             }
 
                             ResetSelected();
-                            //this._selectedSquare.HidePiece();
-                            //tappedButton.ShowPiece(this._selectedSquare.GetSquare().Piece.Color);
                         }
                         this._selectedSquare = null;
 
@@ -370,6 +380,7 @@ namespace GameProject.ViewModels
                     squareButton.AddGestureRecognizer(emptyTapGestureRecognizer);
                 }
             }
+
         }
     }
 }
