@@ -16,10 +16,12 @@ namespace GameProject.Models
         private readonly int _row;
         private readonly int _column;
 
-        public CheckersSquareButton(CheckersSquare square)
+        public CheckersSquareButton(CheckersSquare square, int row, int col)
         {
             this._square = square;
             BackgroundColor = square.TileColor;
+            this._row = row;
+            this._column = col;
             Content = square.Piece.Piece;
         }
 
@@ -71,7 +73,7 @@ namespace GameProject.Models
 
         public bool HasPiece()
         {
-            if (this._square.Piece.GetFillColor().Equals(new SolidColorBrush(Colors.Transparent)))
+            if (this._square.Piece.Color.Equals(Colors.Transparent))
             {
                 return false;
             }

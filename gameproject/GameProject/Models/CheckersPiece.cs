@@ -64,6 +64,7 @@ namespace GameProject.Models
 
         public void SetColor(Color color)
         {
+            this._color = color;
             this._piece.Fill = new SolidColorBrush(color);
         }
 

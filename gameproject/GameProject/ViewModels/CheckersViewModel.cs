@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -111,7 +112,7 @@ namespace GameProject.ViewModels
                     }
                     else if (row > 4 && square.IsBlack)
                     {
-                        square.Piece = new CheckersPiece(Color.FromRgb(40, 40, 40));
+                        square.Piece = new CheckersPiece(Colors.Black);
                     }
                     else
                     {
@@ -135,41 +136,12 @@ namespace GameProject.ViewModels
                 for (int col = 0; col < squares.GetLength(1); col++)
                 {
                     CheckersSquare square = squares[row, col];
-                    CheckersSquareButton button = new(square)
+                    CheckersSquareButton button = new(square, row, col)
                     {
                         Padding = new Thickness(0),
                         Margin = new Thickness(0),
                         CornerRadius = 0,
                     };
-
-                    //TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-                    //tapGestureRecognizer.Tapped += async (s, e) =>
-                    //{
-                        //if(button.HasPiece())
-                        //if (this._selectedSquare != null)
-                        //{
-                        //    this._selectedSquare.ResetSelected();
-                        //}
-
-                        //if (button.HasPiece())
-                        //{
-                        //    this._selectedSquare = button;
-                        //    button.SelectPiece();
-                        //}
-
-                        //if (button.HasPiece() && !_isPieceSelected)
-                        //{
-                        //    _isPieceSelected = true;
-                        //    this._selectedSquare = button;
-                        //    button.SelectPiece();
-                        //}
-                        //else if (!button.HasPiece() && _isPieceSelected)
-                        //{
-                        //    _isPieceSelected = false;
-                        //    MovePiece(button);
-                        //}
-                    //};
-                    //button.AddGestureRecognizer(tapGestureRecognizer);
                     _squareButtons[row, col] = button;
                     _checkersGrid.Children.Add(button);
                     Grid.SetRow( button, row);
@@ -192,21 +164,37 @@ namespace GameProject.ViewModels
             this._model.Add("squareSelected", false);
         }
 
-        public bool IsValidMove(int sourceRow, int sourceCol, int targetRow, int targetCol)
+        public bool IsValidMove(CheckersSquareButton start, CheckersSquareButton end)
         {
+            var sourceRow = start.GetRow();
+            var sourceCol = start.GetCol();
+            var targetRow = end.GetRow();
+            var targetCol = end.GetCol();
+
             if (_squareButtons[targetRow, targetCol].HasPiece())
             {
                 return false;
             }
 
-            int rowDelta = Math.Abs(targetRow - sourceRow);
-            int columnDelta = Math.Abs(targetCol - sourceCol);
+            if (targetRow > sourceRow && start.GetSquare().Piece.Color.Equals(Colors.Black))
+            {
+                return false;
+            }
+
+            if (targetRow < sourceRow && start.GetSquare().Piece.Color.Equals(Colors.Red))
+            {
+                return false;
+            }
+
+
+            var rowDelta = Math.Abs(targetRow - sourceRow);
+            var columnDelta = Math.Abs(targetCol - sourceCol); 
             if (rowDelta != columnDelta)
             {
                 return false;
             }
 
-            int maxDistance = 2; // Maximum allowed move distance
+            var maxDistance = 1;
             if (rowDelta > maxDistance || columnDelta > maxDistance)
             {
                 return false;
@@ -217,12 +205,72 @@ namespace GameProject.ViewModels
 
         public bool MovePiece(CheckersSquareButton startSquare, CheckersSquareButton endSquare)
         {
-            if (IsValidMove(startSquare.GetRow(), startSquare.GetCol(), endSquare.GetRow(), endSquare.GetCol()))
+            IsValidMove(startSquare, endSquare);
+            if (endSquare.BackgroundColor.Equals(Color.FromRgb(152, 143, 143)))
             {
+                endSquare.ShowPiece(startSquare.GetSquare().Piece.Color);
+                startSquare.HidePiece();
                 UpdateSquareGestureRecognizers();
                 return true;
             }
             return false;
+        }
+
+        public void ShowPossibleMoves(CheckersSquareButton squareButton)
+        {
+            var sourceRow = squareButton.GetRow();
+            var sourceCol = squareButton.GetCol();
+
+            foreach (var sqButton in _squareButtons)
+            {
+
+                if (IsValidMove(squareButton, sqButton))
+                {
+                    sqButton.SelectPiece();
+                }
+            }
+
+            var opponentColor = squareButton.GetSquare().Piece.Color == Colors.Red ? Colors.Black : Colors.Red;
+            var targetRow = sourceRow - 1; // Up direction
+            var targetColLeft = sourceCol - 1; // Left diagonal
+            var targetColRight = sourceCol + 1; // Right diagonal
+
+            if (targetRow >= 0 && targetRow < 8 && targetColLeft >= 0 && targetColLeft < 8)
+            {
+                var leftNeighbor = _squareButtons[targetRow, targetColLeft];
+                if (leftNeighbor.HasPiece() && leftNeighbor.GetSquare().Piece.Color == opponentColor)
+                {
+                    var jumpRow = targetRow - 1;
+                    var jumpCol = targetColLeft - 1;
+                    if (jumpRow >= 0 && jumpRow < 8 && jumpCol >= 0 && jumpCol < 8 && !_squareButtons[jumpRow, jumpCol].HasPiece())
+                    {
+                        _squareButtons[jumpRow, jumpCol].SelectPiece();
+                    }
+                }
+            }
+
+            if (targetRow >= 0 && targetRow < 8 && targetColRight >= 0 && targetColRight < 8)
+            {
+                var rightNeighbor = _squareButtons[targetRow, targetColRight];
+                if (rightNeighbor.HasPiece() && rightNeighbor.GetSquare().Piece.Color == opponentColor)
+                {
+                    var jumpRow = targetRow - 1;
+                    var jumpCol = targetColRight + 1;
+                    if (jumpRow >= 0 && jumpRow < 8 && jumpCol >= 0 && jumpCol < 8 && !_squareButtons[jumpRow, jumpCol].HasPiece())
+                    {
+                        _squareButtons[jumpRow, jumpCol].SelectPiece();
+                    }
+                }
+            }
+        }
+
+
+        private void ResetSelected()
+        {
+            foreach (var squareButton in _squareButtons)
+            {
+                squareButton.ResetSelected();
+            }
         }
 
         private void UpdateSquareGestureRecognizers()
@@ -238,11 +286,12 @@ namespace GameProject.ViewModels
                     {
                         if (this._selectedSquare != null)
                         {
-                            this._selectedSquare.ResetSelected();
+                            ResetSelected();
                         }
-
+                        //if(this._selectedSquare
                         this._selectedSquare = squareButton;
                         squareButton.SelectPiece();
+                        ShowPossibleMoves(squareButton);
                     };
 
                     squareButton.AddGestureRecognizer(pieceTapGestureRecognizer);
@@ -256,16 +305,18 @@ namespace GameProject.ViewModels
 
                         if (this._selectedSquare != null && tappedButton.GetSquare().IsBlack)
                         {
+                            //MovePiece(this._selectedSquare, tappedButton);
                             if (!MovePiece(this._selectedSquare, tappedButton))
                             {
                                 return;
                             }
 
-                            this._selectedSquare.ResetSelected();
-                            this._selectedSquare.HidePiece();
-                            tappedButton.ShowPiece(this._selectedSquare.GetSquare().Piece.Color);
-                            this._selectedSquare = null;
+                            ResetSelected();
+                            //this._selectedSquare.HidePiece();
+                            //tappedButton.ShowPiece(this._selectedSquare.GetSquare().Piece.Color);
                         }
+                        this._selectedSquare = null;
+
                     };
 
                     squareButton.AddGestureRecognizer(emptyTapGestureRecognizer);
