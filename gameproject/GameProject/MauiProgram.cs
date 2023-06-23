@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Plugin.Maui.Audio;
 
 namespace GameProject;
 
@@ -22,4 +23,3 @@ public static class MauiProgram
         return builder.Build();
     }
 }
-

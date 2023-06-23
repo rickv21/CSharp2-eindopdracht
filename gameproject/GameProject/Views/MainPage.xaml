@@ -1,0 +1,58 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GameProject.Views.MainPage">
+    <Grid VerticalOptions="Center" HorizontalOptions="Center" Rotation="45" WidthRequest="400" HeightRequest="400">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Button 1 -->
+        <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="LimeGreen" CornerRadius="0"
+               MinimumWidthRequest="100" MinimumHeightRequest="100" 
+               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Label Text="Vier op een rij" TextColor="Black" Rotation="-45"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold" />
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnMemoryButtonClicked" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <!-- Button 2 -->
+        <Frame Grid.Row="0" Grid.Column="1" BackgroundColor="Blue" CornerRadius="0"
+               MinimumWidthRequest="100" MinimumHeightRequest="100"
+               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Label Text="Memory" TextColor="Black" Rotation="-45"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold" />
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnConnectFourButtonClicked" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <!-- Button 3 -->
+        <Frame Grid.Row="1" Grid.Column="0" BackgroundColor="Red" CornerRadius="0"
+               MinimumWidthRequest="100" MinimumHeightRequest="100"
+               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Label Text="Dammen" TextColor="Black" Rotation="-45"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold" />
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCheckersButtonClicked" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <!-- Button 4 -->
+        <Frame Grid.Row="1" Grid.Column="1" BackgroundColor="Yellow" CornerRadius="0"
+               MinimumWidthRequest="100" MinimumHeightRequest="100"
+               HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Label Text="Verander gebruikersnaam" TextColor="Black" Rotation="-45"
+                   HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold" />
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnChangeUsernameButtonClicked" />
+            </Frame.GestureRecognizers>
+        </Frame>
+    </Grid>
+</ContentPage>
