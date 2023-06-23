@@ -366,6 +366,7 @@ namespace GameProject.ViewModels
         {
             int highScore = model.Get<int>("highScore");
             int turn = model.Get<int>("turns");
+            model.Add("won", true);
 
             Debug.WriteLine($"{highScore} turn {turn}");
 
