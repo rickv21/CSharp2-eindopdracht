@@ -4,7 +4,7 @@ using Xunit;
 using Microsoft.Maui.Controls;
 using GameProject.ViewModels;
 
-namespace GameProject.Tests
+namespace TestProject
 {
     public class CheckersViewModelTests
     {

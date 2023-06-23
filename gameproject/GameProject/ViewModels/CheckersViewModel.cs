@@ -93,6 +93,11 @@ namespace GameProject.ViewModels
             GenerateBoard();
         }
 
+        public void ResetGame()
+        {
+
+        }
+
         public void GenerateBoard()
         {
             CheckersSquare[,] squares = new CheckersSquare[8, 8];
@@ -170,6 +175,11 @@ namespace GameProject.ViewModels
         {
             this._model.Add("playerTurn", this._black);
             this._model.Add("squareSelected", null);
+            Stream normalBeep = AudioPlayer.LoadAudio("beep-v2.mp3");
+            Stream win = AudioPlayer.LoadAudio("win.mp3");
+
+            _model.Set("normalBeep", normalBeep);
+            _model.Set("win", win);
         }
 
         public bool IsValidMove(CheckersSquareButton start, CheckersSquareButton end)
@@ -217,6 +227,7 @@ namespace GameProject.ViewModels
         {
             if (endSquare.IsSelected())
             {
+                AudioPlayer.PlaySound(_model.Get<Stream>("normalBeep"), 0.3);
                 MakeMove(startSquare, endSquare);
                 CheckForWin();
                 UpdateSquareGestureRecognizers();
@@ -355,6 +366,8 @@ namespace GameProject.ViewModels
 
         private void showWinMSg(String winner)
         {
+            AudioPlayer.PlaySound(_model.Get<Stream>("win"), 0.3);
+
             var popupMessage = new PopupMessage()
             {
                 Title = "Winner",

@@ -21,7 +21,7 @@ namespace GameProject.Views
 
         private async void OnCheckersButtonClicked(object sender, EventArgs e)
         {
-            // await Shell.Current.GoToAsync("//Checkers");
+            await Shell.Current.GoToAsync("//Checkers");
 
         }
 

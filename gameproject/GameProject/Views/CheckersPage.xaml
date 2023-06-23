@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="GameProject.CheckersPage"
-             Title="CheckersPage"
+             x:Class="GameProject.Views.CheckersPage"
+             Title="Checkers"
              BackgroundColor="gray">
+    
     <ScrollView Orientation="Both">
         <ScrollView.Content>
             <Grid>
@@ -11,7 +12,10 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label x:Name="TurnLabel" Text="{Binding TurnText}" HorizontalOptions="Start" Margin="50,5,0,5" VerticalOptions="Start" Grid.Row="1" />
+
+                <Button x:Name="BackButton" Text="Go back" WidthRequest="100" HorizontalOptions="Start" Clicked="OnBackButtonClicked" />
+                <Label x:Name="TurnLabel" Text="{Binding TurnText}" FontSize="24" HorizontalOptions="Start" Margin="50,5,0,5" VerticalOptions="Start" Grid.Row="1" />
+
 
                 <ScrollView Grid.Row="1" Orientation="Vertical">
                     <Grid x:Name="CheckersGrid"  VerticalOptions="Center" HorizontalOptions="Center">
