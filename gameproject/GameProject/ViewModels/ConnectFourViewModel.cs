@@ -44,21 +44,33 @@ namespace GameProject.ViewModels
             }
         }
 
+        private string userName;
+
+        public string UserName
+        {
+            get => userName;
+            set
+            {
+                userName = value;
+            }
+        }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private enum Player
+        public enum Player
         {
             None = 0,
             Red,
             Yellow
         }
 
-        public ConnectFourViewModel(Grid gameGrid)
+        public ConnectFourViewModel(Grid gameGrid, string username)
         {
             model = new GameModel();
+            this.UserName = username;
             this.gameGrid = gameGrid;
 
             InitializeGame();
@@ -98,12 +110,20 @@ namespace GameProject.ViewModels
             model.Add("isGameOver", false);
         }
 
+        public GameModel GetModel()
+        {
+            return model;
+        }
+
 
         private void DrawBoard()
         {
             gameGrid.Children.Clear();
             gameGrid.RowDefinitions.Clear();
             gameGrid.ColumnDefinitions.Clear();
+            gameGrid.ColumnSpacing = 25;
+            gameGrid.RowSpacing = 25;
+            gameGrid.Padding = new Thickness(50, 50, 50, 50);
 
             for (int row = 0; row < Rows; row++)
             {
@@ -166,6 +186,7 @@ namespace GameProject.ViewModels
                 {
                     AudioPlayer.PlaySound(model.Get<Stream>("win"), 0.3);
                     currentPlayer = model.Get<Player>("currentPlayer");
+                    model.Set("isGameOver", true);
                     var popupMessage = new PopupMessage
                     {
                         Title = "Game over",
@@ -174,7 +195,7 @@ namespace GameProject.ViewModels
 
                     MessagingCenter.Send(this, "ConnectFourPopup", popupMessage);
 
-                    model.Set("isGameOver", true);
+                  
                     return;
                 }
 

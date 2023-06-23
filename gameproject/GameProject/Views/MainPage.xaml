@@ -11,6 +11,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+
         <!-- Button 1 -->
         <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="LimeGreen" CornerRadius="0"
                MinimumWidthRequest="100" MinimumHeightRequest="100" 

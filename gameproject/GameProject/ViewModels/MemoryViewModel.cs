@@ -390,10 +390,8 @@ namespace GameProject.ViewModels
             try
             {
                 string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                string fileName = "score.txt";
+                string fileName = "GameProject.txt";
                 string filePath = Path.Combine(documentPath, fileName);
-
-                Debug.WriteLine(filePath);
 
 
                 if (!File.Exists(filePath))
@@ -458,7 +456,7 @@ namespace GameProject.ViewModels
             try
             {
                 string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                string fileName = "score.txt";
+                string fileName = "GameProject.txt";
                 string filePath = Path.Combine(documentPath, fileName);
 
                 List<string> fileContent = new List<string>(File.ReadAllLines(filePath));
