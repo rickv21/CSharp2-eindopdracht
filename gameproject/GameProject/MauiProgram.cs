@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Plugin.Maui.Audio;
 
 namespace GameProject;
 
@@ -15,11 +16,8 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
-#if DEBUG
-		builder.Logging.AddDebug();
-#endif
+       // builder.Services.AddSingleton(AudioManager.Current);
 
-		return builder.Build();
+        return builder.Build();
 	}
 }
-

@@ -9,4 +9,3 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute("ConnectFour", typeof(ConnectFour));
 	}
 }
-
