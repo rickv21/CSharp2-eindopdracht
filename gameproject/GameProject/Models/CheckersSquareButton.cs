@@ -89,6 +89,16 @@ namespace GameProject.Models
         public void HidePiece()
         {
             this._square.Piece.SetColor(Colors.Transparent);
+            this._square.Piece.IsKing = false;
+            this._square.Piece.Piece.Stroke = Colors.Transparent;
+        }
+
+        public void MakeKing(Color color)
+        {
+            this._square.Piece.IsKing = true;
+            this._square.Piece.Piece.Stroke = Colors.Yellow;
+            this._square.Piece.Piece.StrokeThickness = 5;
+            this._square.Piece.SetColor(color);
         }
 
 

@@ -222,8 +222,14 @@ namespace GameProject.ViewModels
 
         private void MakeMove(CheckersSquareButton startSquare, CheckersSquareButton endSquare)
         {
-            endSquare.ShowPiece(startSquare.GetSquare().Piece.Color);
-            startSquare.HidePiece();
+            if (startSquare.GetSquare().Piece.IsKing)
+            {
+                endSquare.MakeKing(startSquare.GetSquare().Piece.Color);
+            }
+            else
+            {
+                endSquare.ShowPiece(startSquare.GetSquare().Piece.Color);
+            }
             if (Math.Abs(endSquare.GetRow() - startSquare.GetRow()) > 1)
             {
                 CheckersSquareButton squareBtn = _model.Get<CheckersSquareButton>("rightNeighbor");
@@ -234,6 +240,16 @@ namespace GameProject.ViewModels
 
                 squareBtn.HidePiece();
             }
+
+            if (endSquare.GetSquare().Piece.Color.Equals(Colors.Black) && endSquare.GetRow() == 0 ||
+                endSquare.GetSquare().Piece.Color.Equals(Colors.Red) && endSquare.GetRow() == 7)
+            {
+                endSquare.MakeKing(startSquare.GetSquare().Piece.Color);
+            }
+            startSquare.HidePiece();
+
+
+
         }
 
         public void ShowPossibleMoves(CheckersSquareButton squareButton)
