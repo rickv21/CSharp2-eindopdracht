@@ -99,6 +99,11 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\ConnectFour.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+	
+	<ItemGroup>
 	  <MauiXaml Update="Views\CheckersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

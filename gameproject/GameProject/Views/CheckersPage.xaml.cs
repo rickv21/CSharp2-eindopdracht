@@ -5,8 +5,8 @@ using System.Threading.Channels;
 using GameProject.ViewModels;
 using Microsoft.Maui.Controls.Shapes;
 
-namespace GameProject
-    {
+namespace GameProject.Views
+{
         public partial class CheckersPage : ContentPage
         {
 
@@ -24,6 +24,13 @@ namespace GameProject
                     await Shell.Current.GoToAsync("//MainPage");
                 });
              }
+
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            viewModel.ResetGame();
+            await Shell.Current.GoToAsync("//MainPage");
         }
+
+    }
 
 }
