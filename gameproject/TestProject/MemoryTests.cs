@@ -8,19 +8,22 @@ namespace TestProject
     public class MemoryTests
     {
 
-        private readonly ITestOutputHelper output;
         //Use this for loggin in tests (usage: output.WriteLine(<value>);)
         //It needs to be in the constructor to work.
+        private readonly ITestOutputHelper output;
 
-        MemoryViewModel viewModel;
+        readonly MemoryViewModel viewModel;
 
+        //Is run before each test.
         public MemoryTests(ITestOutputHelper output) {
             this.output = output;
-            //Is run before each test.
             viewModel = new MemoryViewModel(new Grid());
             viewModel.SetupModelValues();
         }
 
+        /// <summary>
+        /// Tests if the default model values are correctly set.
+        /// </summary>
         [Fact]
         public void TestModelValues()
         {
@@ -31,6 +34,9 @@ namespace TestProject
             Assert.Equal(1, viewModel.GetModel().Get<int>("turns"));
         }
 
+        /// <summary>
+        /// Tests if the correct values are generated and that there are always two of each value.
+        /// </summary>
         [Fact]
         public void TestBoardValues()
         {
@@ -62,6 +68,9 @@ namespace TestProject
         
         }
 
+        /// <summary>
+        /// Tests the click card action and if winning the game works correctly.
+        /// </summary>
         [Fact]
         public async Task TestWinAsync()
         {
