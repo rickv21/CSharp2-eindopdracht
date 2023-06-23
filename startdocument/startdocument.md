@@ -7,7 +7,7 @@ Startdocument van **Rick Vinke**, **Jesse Vugteveen**, **Jesse Oost**, **Max App
 Voor de eindopdracht van C#-2 gaan we een collectie van kleine spellen maken.
 Deze collectie zal bestaan uit de volgende 3 spellen:
 
-- Dammen
+- Checkers
 - Vier op een rij
 - Memory
 
@@ -83,11 +83,11 @@ Dit is het menuscherm waar de gebruiker een game kan kiezen, ook is er de mogeli
 De memory game. De gebruiker mag per keer twee kaartjes omdraaien. Als deze hetzelfde zijn worden de kaartjes uit het spel gehaald.
 Als de kaartjes niet hetzelfde zijn worden ze weer omgedraaid. Verder wordt bijgehouden hoeveel beurten de gebruiker nodig heeft om het spel te voltooien.
 
-### Dammen
+### Checkers
 
 ![schaakbord](img/dammen.png "dammen")
 
-Traditioneel dammen. Spelers kunnen via een lokaal netwerk tegen elkaar spelen. Degene die als eerste alle stukken van de tegenstander weg heeft gespeeld wint.
+Traditioneel checkers (dus niet dammen). Spelers kunnen via een lokaal netwerk tegen elkaar spelen. Degene die als eerste alle stukken van de tegenstander weg heeft gespeeld wint.
 
 ### Vier op een rij
 
@@ -117,6 +117,8 @@ Vier op een rij, twee spelers spelen tegen elkaar en mogen om de beurt een zet d
 
 **Week 8**
 - Applicatie testen
+
+**Week 9**
 - Eindpresentatie
 
 ## Testplan
