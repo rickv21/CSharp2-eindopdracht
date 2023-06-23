@@ -1,4 +1,4 @@
-namespace GameProject;
+namespace GameProject.Views;
 
 public partial class ConnectFour : ContentPage
 {

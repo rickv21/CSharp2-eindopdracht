@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
+using System.Xml.Linq;
 
 namespace GameProject.Views
 {
@@ -20,9 +21,9 @@ namespace GameProject.Views
 
         }
 
-        private void OnConnectFourButtonClicked(object sender, EventArgs e)
+        private async void OnConnectFourButtonClicked(object sender, EventArgs e)
         {
-            // await Shell.Current.GoToAsync("//ConnectFour");
+            await Shell.Current.GoToAsync("//ConnectionPage?entry=connectFour");
         }
 
         private void OnChangeUsernameButtonClicked(object sender, EventArgs e)

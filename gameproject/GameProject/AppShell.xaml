@@ -6,13 +6,8 @@
 
     <ShellContent Title="Main" Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
     <ShellContent Title="Memory" Route="Memory" ContentTemplate="{DataTemplate views:Memory}" />
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-    <ShellContent
-        Title="ConnectFour"
-        ContentTemplate="{DataTemplate local:ConnectFour}"
-        Route="ConnectFour" />
+    <ShellContent Title="ConnectionPage" Route="ConnectionPage" ContentTemplate="{DataTemplate views:ConnectionPage}" />
+    <ShellContent Title="ConnectFour" Route="ConnectFour" ContentTemplate="{DataTemplate views:ConnectFour}" />    
+    
+    
 </Shell>

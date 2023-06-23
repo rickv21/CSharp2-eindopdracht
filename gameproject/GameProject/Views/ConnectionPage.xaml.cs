@@ -5,15 +5,33 @@ using GameProject.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace GameProject;
+namespace GameProject.Views;
 
-public partial class MainPage : ContentPage
+[QueryProperty("Entry", "entry")]
+public partial class ConnectionPage : ContentPage
 {
+
+    private string entry;
+
+    public string Entry
+    {
+        set
+        {
+            entry = Uri.UnescapeDataString(value);
+        }
+    }
+
     private TcpConnection network;
 
-    public MainPage()
+    public ConnectionPage()
     {
         InitializeComponent();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        Debug.WriteLine(entry);
     }
 
     private async void OnCreateHostClicked(object sender, EventArgs e)
@@ -26,6 +44,7 @@ public partial class MainPage : ContentPage
         this.network = new TcpConnection();
 
         await network.StartServer();
+        Debug.WriteLine("host!!!!!!!!!!!!!!");
     }
 
     private void OnConnectClientClicked(object sender, EventArgs e)
@@ -75,10 +94,11 @@ public partial class MainPage : ContentPage
             Debug.WriteLine(network.IsConnected());
             if(network.IsConnected() )
             {
-            
-                    JObject jObject = new JObject();
-                    jObject["message"] = "test";
-                    network.SendMessage(jObject.ToString(Formatting.None));
+                string networkJson = JsonConvert.SerializeObject(network);
+                if (entry.Equals("connectFour"))
+                {
+                    await Shell.Current.GoToAsync($"//ConnectFour?network={Uri.EscapeDataString(networkJson)}");
+                }
             }
         }
     }

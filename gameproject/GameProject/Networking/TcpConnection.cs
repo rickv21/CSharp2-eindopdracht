@@ -22,6 +22,7 @@ namespace GameProject.Networking
         private NetworkStream stream;
         private byte[] receiveBuffer;
         private bool isHost;
+        private Action<JObject> callback;
 
         public TcpConnection() { }
 
@@ -55,9 +56,7 @@ namespace GameProject.Networking
 
                 await Task.Run(() => {
 
-                    Debug.WriteLine(RecieveMessage());
-
-
+                    RecieveMessage();
                     });
             }
             catch (Exception ex)
@@ -77,6 +76,7 @@ namespace GameProject.Networking
 
                 stream = client.GetStream();
                 receiveBuffer = new byte[1024];
+
             }
             catch (SocketException ex)
             {
@@ -107,6 +107,11 @@ namespace GameProject.Networking
             return client != null && client.Connected;
         }
 
+        public void SetCallback(Action<JObject> callback)
+        {
+            this.callback = callback;
+        }
+
 
         public string RecieveMessage()
         {
@@ -122,6 +127,7 @@ namespace GameProject.Networking
                         string receivedMessage = Encoding.ASCII.GetString(receiveBuffer, 0, bytesRead);
                         receivedData.Append(receivedMessage);
                         var jsonObject = JObject.Parse(receivedMessage);
+                        callback(jsonObject);
                         var price = (JObject)jsonObject["message"];
                         Debug.WriteLine(price.ToString());
                         // Process or display the received data here as needed

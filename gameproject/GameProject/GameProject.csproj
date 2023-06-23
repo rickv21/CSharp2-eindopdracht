@@ -68,6 +68,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\ConnectionPage.xaml.cs">
+	    <DependentUpon>ConnectionPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Memory.xaml.cs">
 	    <SubType>Code</SubType>
 	    <DependentUpon>Memory.xaml</DependentUpon>
@@ -91,7 +94,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="ConnectFour.xaml">
+	  <MauiXaml Update="Views\ConnectFour.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
