@@ -48,16 +48,24 @@
   </PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Audio\beep-bad-v2.mp3" />
 	  <None Remove="Resources\Audio\beep-bad.wav" />
 	  <None Remove="Resources\Audio\beep-good.wav" />
+	  <None Remove="Resources\Audio\beep-v2.mp3" />
 	  <None Remove="Resources\Audio\beep.wav" />
+	  <None Remove="Resources\Audio\lose.mp3" />
+	  <None Remove="Resources\Audio\win.mp3" />
 	  <None Remove="Resources\Images\dice.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Audio\beep-bad-v2.mp3" />
 	  <EmbeddedResource Include="Resources\Audio\beep-bad.wav" />
 	  <EmbeddedResource Include="Resources\Audio\beep-good.wav" />
+	  <EmbeddedResource Include="Resources\Audio\beep-v2.mp3" />
 	  <EmbeddedResource Include="Resources\Audio\beep.wav" />
+	  <EmbeddedResource Include="Resources\Audio\lose.mp3" />
+	  <EmbeddedResource Include="Resources\Audio\win.mp3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -67,6 +75,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\InputPromptPage.xaml.cs">
+	    <DependentUpon>InputPromptPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Memory.xaml.cs">
 	    <SubType>Code</SubType>
 	    <DependentUpon>Memory.xaml</DependentUpon>
@@ -74,6 +85,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\InputPromptPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Memory.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -84,6 +98,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\ConnectFour.xaml">
 	  <MauiXaml Update="Views\CheckersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

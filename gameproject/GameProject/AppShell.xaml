@@ -6,5 +6,5 @@
 
     <ShellContent Title="Main" Route="MainPage" ContentTemplate="{DataTemplate views:MainPage}" />
     <ShellContent Title="Memory" Route="Memory" ContentTemplate="{DataTemplate views:Memory}" />
-
+    <ShellContent Title="ConnectFour" Route="ConnectFour" ContentTemplate="{DataTemplate views:ConnectFour}" />
 </Shell>
