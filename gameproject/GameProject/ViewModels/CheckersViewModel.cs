@@ -64,6 +64,11 @@ namespace GameProject.ViewModels
             }
         }
 
+        public CheckersModel GetModel()
+        {
+            return _model; 
+        }
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -80,7 +85,7 @@ namespace GameProject.ViewModels
             StartGame();
         }
 
-        private void StartGame()
+        public void StartGame()
         {
             Debug.WriteLine("Starting game!!");
             TurnText = "Turn: " + this._turn.Name;
@@ -88,7 +93,7 @@ namespace GameProject.ViewModels
             GenerateBoard();
         }
 
-        private void GenerateBoard()
+        public void GenerateBoard()
         {
             CheckersSquare[,] squares = new CheckersSquare[8, 8];
             for (var row = 0; row < 8; row++)
@@ -161,10 +166,10 @@ namespace GameProject.ViewModels
             SetupModelValues();
         }
 
-        private void SetupModelValues()
+        public void SetupModelValues()
         {
-            this._model.Add("playerTurn", 0);
-            this._model.Add("squareSelected", false);
+            this._model.Add("playerTurn", this._black);
+            this._model.Add("squareSelected", null);
         }
 
         public bool IsValidMove(CheckersSquareButton start, CheckersSquareButton end)
@@ -220,7 +225,7 @@ namespace GameProject.ViewModels
             return false;
         }
 
-        private void MakeMove(CheckersSquareButton startSquare, CheckersSquareButton endSquare)
+        public void MakeMove(CheckersSquareButton startSquare, CheckersSquareButton endSquare)
         {
             if (startSquare.GetSquare().Piece.IsKing)
             {
@@ -230,6 +235,7 @@ namespace GameProject.ViewModels
             {
                 endSquare.ShowPiece(startSquare.GetSquare().Piece.Color);
             }
+
             if (Math.Abs(endSquare.GetRow() - startSquare.GetRow()) > 1)
             {
                 CheckersSquareButton squareBtn = _model.Get<CheckersSquareButton>("rightNeighbor");
