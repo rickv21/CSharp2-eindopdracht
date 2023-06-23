@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GameProject.ConnectFour"
+             Title="ConnectFour">
+    <Grid Padding="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label x:Name="titleLabel" Text="Current Player: Red" FontSize="24" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" IsVisible="False" />
+
+        <Grid x:Name="gameGrid" Grid.Row="1" BackgroundColor="Blue" Margin="0,10,0,0" ColumnSpacing="5" RowSpacing="5">
+
+        </Grid>
+
+        <Button x:Name="startButton" Text="Start New Game" Clicked="NewGame_Clicked" HorizontalOptions="Center" VerticalOptions="End" Margin="0,0,0,10" />
+    </Grid>
+</ContentPage>
