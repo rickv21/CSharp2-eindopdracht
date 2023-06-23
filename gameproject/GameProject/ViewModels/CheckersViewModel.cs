@@ -157,7 +157,7 @@ namespace GameProject.ViewModels
 
         internal void ResetCheckersGame()
         {
-            TurnText = "Player 1";
+            TurnText = "Turn: " + this._turn.Name;
             SetupModelValues();
         }
 
