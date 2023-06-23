@@ -8,23 +8,24 @@ namespace GameProject.Models
 {
     public class CheckersPlayer
     {
-        private readonly bool _isWhitePiece;
-        private bool _isTurn;
+        private readonly string _name;
+        private readonly Color _color;
 
-        public CheckersPlayer(bool isWhitePiece)
+        public CheckersPlayer(string name, Color color)
         {
-            this._isWhitePiece = isWhitePiece;
+            this._name = name;
+            this._color = color;
         }
 
-        public bool IsWhitePiece
+        public string Name
         {
-            get => _isWhitePiece;
+            get => _name;
         }
 
-        public bool IsTurn
+        public Color Color
         {
-            get => _isTurn;
-            set => _isTurn = value;
+            get => _color;
         }
+        
     }
 }

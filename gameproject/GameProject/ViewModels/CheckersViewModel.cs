@@ -19,9 +19,9 @@ namespace GameProject.ViewModels
         private Grid _checkersGrid;
         private string _turnText;
         private CheckersSquareButton _selectedSquare;
-        private CheckersPlayer _player1;
-        private CheckersPlayer _player2;
-        private bool _isPieceSelected;
+        private CheckersPlayer _red;
+        private CheckersPlayer _black;
+        private CheckersPlayer _turn;
         private CheckersSquareButton[,] _squareButtons;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -74,13 +74,16 @@ namespace GameProject.ViewModels
             this._model = new CheckersModel();
             this._checkersGrid = checkersGrid;
             this._squareButtons = new CheckersSquareButton[8, 8];
+            this._red = new CheckersPlayer("red", Colors.Red);
+            this._black = new CheckersPlayer("black", Colors.Black);
+            this._turn = _black;
             StartGame();
         }
 
         private void StartGame()
         {
             Debug.WriteLine("Starting game!!");
-            TurnText = "Turn: 1";
+            TurnText = "Turn: " + this._turn.Name;
             SetupModelValues();
             GenerateBoard();
         }
@@ -176,17 +179,19 @@ namespace GameProject.ViewModels
                 return false;
             }
 
-            if (targetRow > sourceRow && start.GetSquare().Piece.Color.Equals(Colors.Black))
+            if (!start.GetSquare().Piece.IsKing)
             {
-                return false;
+                if (targetRow > sourceRow && start.GetSquare().Piece.Color.Equals(Colors.Black))
+                {
+                    return false;
+                }
+
+                if (targetRow < sourceRow && start.GetSquare().Piece.Color.Equals(Colors.Red))
+                {
+                    return false;
+                }
             }
-
-            if (targetRow < sourceRow && start.GetSquare().Piece.Color.Equals(Colors.Red))
-            {
-                return false;
-            }
-
-
+            
             var rowDelta = Math.Abs(targetRow - sourceRow);
             var columnDelta = Math.Abs(targetCol - sourceCol); 
             if (rowDelta != columnDelta)
@@ -205,26 +210,30 @@ namespace GameProject.ViewModels
 
         public bool MovePiece(CheckersSquareButton startSquare, CheckersSquareButton endSquare)
         {
-            //IsValidMove(startSquare, endSquare);
-            if (endSquare.BackgroundColor.Equals(Color.FromRgb(152, 143, 143)))
+            if (endSquare.IsSelected())
             {
-                endSquare.ShowPiece(startSquare.GetSquare().Piece.Color);
-                startSquare.HidePiece();
-                if (Math.Abs(endSquare.GetRow() - startSquare.GetRow()) > 1)
-                {
-                    CheckersSquareButton squareBtn = _model.Get<CheckersSquareButton>("rightNeighbor");
-                    if (endSquare.GetCol() < startSquare.GetCol())
-                    {
-                        squareBtn = _model.Get<CheckersSquareButton>("leftNeighbor");
-                    }
-                        
-                    squareBtn.HidePiece();
-                }
+                MakeMove(startSquare, endSquare);
                 CheckForWin();
                 UpdateSquareGestureRecognizers();
                 return true;
             }
             return false;
+        }
+
+        private void MakeMove(CheckersSquareButton startSquare, CheckersSquareButton endSquare)
+        {
+            endSquare.ShowPiece(startSquare.GetSquare().Piece.Color);
+            startSquare.HidePiece();
+            if (Math.Abs(endSquare.GetRow() - startSquare.GetRow()) > 1)
+            {
+                CheckersSquareButton squareBtn = _model.Get<CheckersSquareButton>("rightNeighbor");
+                if (endSquare.GetCol() < startSquare.GetCol())
+                {
+                    squareBtn = _model.Get<CheckersSquareButton>("leftNeighbor");
+                }
+
+                squareBtn.HidePiece();
+            }
         }
 
         public void ShowPossibleMoves(CheckersSquareButton squareButton)
@@ -235,6 +244,13 @@ namespace GameProject.ViewModels
                 {
                     sqButton.SelectPiece();
                 }
+            }
+
+            if (squareButton.GetSquare().Piece.IsKing)
+            {
+                CheckForNeighborPieces(squareButton, 1);
+                CheckForNeighborPieces(squareButton, -1);
+                return;
             }
 
             if (squareButton.GetSquare().Piece.Color.Equals(Colors.Black))
@@ -334,6 +350,18 @@ namespace GameProject.ViewModels
             }
         }
 
+        private void SwitchTurn()
+        {
+            if (this._turn == this._red)
+            {
+                this._turn = this._black;
+                TurnText = "Turn: " + this._black.Name;
+                return;
+            }
+            this._turn = this._red;
+            TurnText = "Turn: " + this._red.Name;
+        }
+
         private void UpdateSquareGestureRecognizers()
         {
             foreach (var squareButton in _squareButtons)
@@ -345,6 +373,10 @@ namespace GameProject.ViewModels
                     TapGestureRecognizer pieceTapGestureRecognizer = new TapGestureRecognizer();
                     pieceTapGestureRecognizer.Tapped += async (s, e) =>
                     {
+                        if (!squareButton.GetSquare().Piece.Color.Equals(this._turn.Color))
+                        {
+                            return;
+                        }
                         if (this._selectedSquare != null)
                         {
                             ResetSelected();
@@ -372,9 +404,9 @@ namespace GameProject.ViewModels
                             }
 
                             ResetSelected();
+                            SwitchTurn();
                         }
                         this._selectedSquare = null;
-
                     };
 
                     squareButton.AddGestureRecognizer(emptyTapGestureRecognizer);

@@ -53,16 +53,17 @@ namespace GameProject.Models
 
         public void SelectPiece()
         {
-            //BorderWidth = 5;
-            //BorderColor = Colors.Red;
             BackgroundColor = Color.FromRgb(152, 143, 143);
-            //this._square.Piece.SetColor(Colors.Green);
         }
 
-        public void MarkSelection()
+        public bool IsSelected()
         {
-            BackgroundColor = Colors.Blue;
-            //BorderWidth = 2;
+            if (BackgroundColor.Equals(Color.FromRgb(152, 143, 143)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void ResetSelected()
