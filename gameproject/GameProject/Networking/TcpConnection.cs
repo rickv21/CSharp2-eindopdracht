@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -52,7 +53,12 @@ namespace GameProject.Networking
                 stream = client.GetStream();
                 receiveBuffer = new byte[1024];
 
-                await Task.Run(() => RecieveMessage());
+                await Task.Run(() => {
+
+                    Debug.WriteLine(RecieveMessage());
+
+
+                    });
             }
             catch (Exception ex)
             {
@@ -115,6 +121,9 @@ namespace GameProject.Networking
                     {
                         string receivedMessage = Encoding.ASCII.GetString(receiveBuffer, 0, bytesRead);
                         receivedData.Append(receivedMessage);
+                        var jsonObject = JObject.Parse(receivedMessage);
+                        var price = (JObject)jsonObject["message"];
+                        Debug.WriteLine(price.ToString());
                         // Process or display the received data here as needed
                     }
                     else

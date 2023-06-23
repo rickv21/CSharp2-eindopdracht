@@ -2,6 +2,8 @@
 
 using GameProject.Networking;
 using GameProject.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace GameProject;
 
@@ -71,6 +73,13 @@ public partial class MainPage : ContentPage
             }
 
             Debug.WriteLine(network.IsConnected());
+            if(network.IsConnected() )
+            {
+            
+                    JObject jObject = new JObject();
+                    jObject["message"] = "test";
+                    network.SendMessage(jObject.ToString(Formatting.None));
+            }
         }
     }
 
