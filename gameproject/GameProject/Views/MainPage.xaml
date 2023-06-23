@@ -18,7 +18,7 @@
             <Label Text="Vier op een rij" TextColor="Black" Rotation="-45"
                    HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold" />
             <Frame.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnMemoryButtonClicked" />
+                <TapGestureRecognizer Tapped="OnConnectFourButtonClicked" />
             </Frame.GestureRecognizers>
         </Frame>
 
@@ -29,7 +29,7 @@
             <Label Text="Memory" TextColor="Black" Rotation="-45"
                    HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold" />
             <Frame.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnConnectFourButtonClicked" />
+                <TapGestureRecognizer Tapped="OnMemoryButtonClicked" />
             </Frame.GestureRecognizers>
         </Frame>
 

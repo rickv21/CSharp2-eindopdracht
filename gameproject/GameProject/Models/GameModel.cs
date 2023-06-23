@@ -2,11 +2,11 @@
 
 namespace GameProject.Models
 {
-    public class MemoryModel
+    public class GameModel
     {
         private Dictionary<string, object> data;
 
-        public MemoryModel()
+        public GameModel()
         {
             data = new Dictionary<string, object>();
         }

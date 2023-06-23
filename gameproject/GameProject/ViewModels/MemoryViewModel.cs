@@ -9,7 +9,7 @@ namespace GameProject.ViewModels
 {
     public class MemoryViewModel : INotifyPropertyChanged
     {
-        private readonly MemoryModel model;
+        private readonly GameModel model;
         private Grid memoryGrid;
         private string turnText;
         private string highScore;
@@ -63,7 +63,7 @@ namespace GameProject.ViewModels
 
         public MemoryViewModel(Grid memoryGrid)
         {
-            model = new MemoryModel();
+            model = new GameModel();
             this.memoryGrid = memoryGrid;
 
 
@@ -86,13 +86,11 @@ namespace GameProject.ViewModels
         /// </summary>
         private void StartGame()
         {
-            Stream normalBeep = AudioPlayer.LoadAudio("beep.wav");
-            Stream badBeep = AudioPlayer.LoadAudio("beep-bad.wav");
-            Stream goodBeep = AudioPlayer.LoadAudio("beep-good.wav");
+            Stream normalBeep = AudioPlayer.LoadAudio("beep-v2.mp3");
+            Stream badBeep = AudioPlayer.LoadAudio("beep-bad-v2.mp3");
 
             model.Set("normalBeep", normalBeep);
             model.Set("badBeep", badBeep);
-            model.Set("goodBeep", goodBeep);
 
             var hook = new SimpleGlobalHook();
 
@@ -148,7 +146,7 @@ namespace GameProject.ViewModels
         }
 
         /// <summary>
-        /// Sets the default values in the mode.
+        /// Sets the default values in the model.
         /// </summary>
         public void SetupModelValues()
         {
@@ -306,7 +304,7 @@ namespace GameProject.ViewModels
             //When no other card has been selected.
             if (lastButton == null)
             {
-                AudioPlayer.PlaySound(model.Get<Stream>("normalBeep"), 0.05);
+                AudioPlayer.PlaySound(model.Get<Stream>("normalBeep"), 0.3);
                 model.Add("lastClickedCard", button);
                 button.MarkSelection();
                 button.IsEnabled = false;
@@ -316,7 +314,7 @@ namespace GameProject.ViewModels
             //When 2 cards with the same value have been selected. (Good)
             if (button.GetCard().GetValue() == lastButton.GetCard().GetValue())
             {
-                AudioPlayer.PlaySound(model.Get<Stream>("goodBeep"), 0.05);
+                AudioPlayer.PlaySound(model.Get<Stream>("normalBeep"), 0.3);
                 button.MarkCorrect();
                 button.IsEnabled = false;
                 lastButton.MarkCorrect();
@@ -335,7 +333,7 @@ namespace GameProject.ViewModels
             }
             else
             {
-                AudioPlayer.PlaySound(model.Get<Stream>("badBeep"), 0.05);
+                AudioPlayer.PlaySound(model.Get<Stream>("badBeep"), 0.1);
                 //When the two cards do not match. (Error)
                 model.Add("animationDone", false);
                 button.MarkWrong();
@@ -444,7 +442,7 @@ namespace GameProject.ViewModels
             }
         }
 
-        public MemoryModel GetModel()
+        public GameModel GetModel()
         {
             return model;
         }

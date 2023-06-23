@@ -48,16 +48,24 @@
   </PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Audio\beep-bad-v2.mp3" />
 	  <None Remove="Resources\Audio\beep-bad.wav" />
 	  <None Remove="Resources\Audio\beep-good.wav" />
+	  <None Remove="Resources\Audio\beep-v2.mp3" />
 	  <None Remove="Resources\Audio\beep.wav" />
+	  <None Remove="Resources\Audio\lose.mp3" />
+	  <None Remove="Resources\Audio\win.mp3" />
 	  <None Remove="Resources\Images\dice.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Audio\beep-bad-v2.mp3" />
 	  <EmbeddedResource Include="Resources\Audio\beep-bad.wav" />
 	  <EmbeddedResource Include="Resources\Audio\beep-good.wav" />
+	  <EmbeddedResource Include="Resources\Audio\beep-v2.mp3" />
 	  <EmbeddedResource Include="Resources\Audio\beep.wav" />
+	  <EmbeddedResource Include="Resources\Audio\lose.mp3" />
+	  <EmbeddedResource Include="Resources\Audio\win.mp3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -84,7 +92,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="ConnectFour.xaml">
+	  <MauiXaml Update="Views\ConnectFour.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
